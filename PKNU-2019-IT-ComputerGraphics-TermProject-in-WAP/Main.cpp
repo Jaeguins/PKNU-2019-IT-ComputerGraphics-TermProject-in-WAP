@@ -1,7 +1,7 @@
 #include<iostream>
 #include<GL/glut.h>
-#include "Mirror/Mirror.h"
-#include "ModelViewer/ModelViewer.h"
+#include "Mirror/Mirror.hpp"
+#include "ModelViewer/ModelViewer.hpp"
 
 
 int main(int argc,char* argv[])

@@ -44,10 +44,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Mirror\Mirror.h">
+    <ClInclude Include="Mirror\Mirror.hpp">
       <Filter>Mirror\Header</Filter>
     </ClInclude>
-    <ClInclude Include="ModelViewer\ModelViewer.h">
+    <ClInclude Include="ModelViewer\ModelViewer.hpp">
       <Filter>ModelViewer\Header</Filter>
     </ClInclude>
   </ItemGroup>
