@@ -16,39 +16,42 @@
     <Filter Include="ModelViewer">
       <UniqueIdentifier>{f68180c5-77e9-43c0-94b7-5f31aaf88831}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Mirror">
-      <UniqueIdentifier>{4eb54259-b0a4-4a5c-a7ba-9d11dcfe1976}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ModelViewer\Source">
       <UniqueIdentifier>{d0a4da9e-2a4a-404c-a1d5-631d1a479626}</UniqueIdentifier>
     </Filter>
     <Filter Include="ModelViewer\Header">
       <UniqueIdentifier>{9c473be9-fe2d-47ec-89ed-350498af95ac}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Mirror\Header">
-      <UniqueIdentifier>{25243fb5-7fca-420f-8c7d-719cf8ffcdf9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Mirror\Source">
-      <UniqueIdentifier>{2a4c3bee-375d-4c9a-8890-663f9938fe3d}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Mirror\Mirror.cpp">
-      <Filter>Mirror\Source</Filter>
+    <ClCompile Include="ModelViewer\GlObject.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="ModelViewer\ModelViewer.cpp">
-      <Filter>ModelViewer\Source</Filter>
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelViewer\Viewport.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelViewer\Gl3dVector.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelViewer\GlCamera.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Mirror\Mirror.hpp">
-      <Filter>Mirror\Header</Filter>
-    </ClInclude>
     <ClInclude Include="ModelViewer\ModelViewer.hpp">
-      <Filter>ModelViewer\Header</Filter>
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelViewer\Viewport.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelViewer\GlObject.hpp">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
