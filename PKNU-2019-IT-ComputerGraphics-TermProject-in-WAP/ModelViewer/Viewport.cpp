@@ -73,8 +73,9 @@ namespace model_viewer {
 
     void viewport::render() {
         glLoadIdentity();
-        Camera->cameraMove();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        parent->consoleIO->render();
+        Camera->cameraMove();
         glBegin(GL_LINES);
         glLineWidth(.3);
         glColor3f(1, 0, 0);
@@ -92,8 +93,6 @@ namespace model_viewer {
         {
             t->render();
         }
-
-        parent->consoleIO->render();
 
         glutSwapBuffers();
         glutPostRedisplay();

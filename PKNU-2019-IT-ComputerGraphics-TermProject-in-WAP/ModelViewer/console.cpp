@@ -8,7 +8,8 @@ namespace model_viewer
 {
     void console::input(const unsigned char in)
     {
-        if (in == 13)process();
+        if(in==8){if(input_buffer->size()>1)input_buffer->pop_back();}
+        else if (in == 13)process();
         else (*input_buffer) += in;
     }
     void console::process()
@@ -23,7 +24,7 @@ namespace model_viewer
 
     void console::render()
     {
-        float WinPosY = 1, diff = .1f;
+        float WinPosY = .9, diff = .1f;
         view->drawText(-1, WinPosY, input_buffer->c_str());
         WinPosY -= diff;
         auto strit = output_buffer->rbegin();
