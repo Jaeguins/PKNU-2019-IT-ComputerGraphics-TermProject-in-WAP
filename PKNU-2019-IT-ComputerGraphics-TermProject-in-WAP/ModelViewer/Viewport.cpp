@@ -1,226 +1,149 @@
-#include <stdio.h>
 #include <GL/glut.h>
-#include "GlObject.hpp"
+#include "gl_object.hpp"
+#include "viewport.hpp"
 #include <vector>
-using namespace std;
-int resolutionX = 500, resolutionY = 500;
-int postX = resolutionX / 2, postY = resolutionX / 2;
-int t = 0;
+#include <functional>
+#include "gl_camera.hpp"
+#include "console.hpp"
+#include "obj_viewer.hpp"
 
-float r = 1, g = 0, b = 0;
-int flag = 0;
 
-GlObject *triangle, *square, *sphere;
-GlCamera* Camera;
-vector<GlObject*> components;
-void keyFunc(unsigned char key, int x, int y) {
-    switch (key) {
-    case 'a':
-        Camera->Position.x -= .01f;
-        break;
-    case 'd':
-        Camera->Position.x += .01f;
-        break;
-    case 'q':
-        Camera->Position.y -= .01f;
-        break;
-    case 'e':
-        Camera->Position.y += .01f;
-        break;
-    case 'w':
-        Camera->Position.z -= .01f;
-        break;
-    case 's':
-        Camera->Position.z += .01f;
-        break;
+namespace model_viewer {
+    extern "C"
+        using namespace std;
+
+    void timerCallback(int prior)
+    {
+        viewport::instance->baseTimerFunc(prior);
     }
-}
-void mousePosFunc(int x, int y) {
-    Camera->xAngle += ((x - postX)) / (resolutionX / 2.0) * 90;
-    Camera->yAngle += ((postY - y)) / (resolutionY / 2.0) * 90;
-    postX = x;
-    postY = y;
-}
-void mouseButtonFunc(int button, int state, int x, int y) {
-}
-void timerFunc(int prior) {
-    t = t >= 360 ? 0 : t += 5;
-    triangle->Scale = Gl3dVector(1, 1, 1)*(-abs(t-180) / 180.0);
-    square->Rotation.angle = t;
-    switch (flag) {
-    case 0:
-        r -= .001;
-        g += .001;
-        if (r < 0) {
-            r = 0;
-            g = 1;
-            flag = flag + 1 % 3;
-        }
-        break;
-    case 1:
-        g -= .001;
-        b += .001;
-        if (g < 0) {
-            g = 0;
-            b = 1;
-            flag = flag + 1 % 3;
-        }
-        break;
-    case 2:
-        b -= .001;
-        r += .001;
-        if (b < 0) {
-            b = 0;
-            r = 1;
-            flag = flag + 1 % 3;
-        }
-        break;
+    void renderCallback()
+    {
+        viewport::instance->render();
+    }
+    void mousePosCallback(int x, int y)
+    {
+        viewport::instance->baseMousePosFunc(x, y);
+    }
+    void keyCallback(unsigned char key, int x, int y)
+    {
+        viewport::instance->baseKeyFunc(key, x, y);
+    }
+    void mouseButtonCallback(int button, int state, int x, int y)
+    {
+        viewport::instance->baseMouseButtonFunc(button, state, x, y);
     }
 
-    
-    glutTimerFunc(30, timerFunc, 1);
-}
+    viewport* viewport::instance = nullptr;
 
-void render() {
-    glLoadIdentity();
-    Camera->cameraMove();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    for (vector<GlObject>::size_type i = 0; i < components.size(); i++) {
-        components[i]->render();
+    void viewport::baseMousePosFunc(int x, int y) {
+        {
+            Camera->xAngle += ((x - postX)) / (resolutionX / 2.0) * 90;
+            Camera->yAngle += ((postY - y)) / (resolutionY / 2.0) * 90;
+            postX = x;
+            postY = y;
+        }
+        if(mousePosFunc!=nullptr)
+        mousePosFunc(x, y);
     }
-    glBegin(GL_LINES);
-    glLineWidth(.3);
-    glColor3f(1, 0, 0);
-    glVertex3f(-10, 0, 0);
-    glVertex3f(10, 0, 0);
-    glColor3f(0, 10, 0);
-    glVertex3f(0, -10, 0);
-    glVertex3f(0, 10, 0);
-    glColor3f(0, 0, 10);
-    glVertex3f(0, 0, -10);
-    glVertex3f(0, 0, 10);
-    glEnd();
 
-    glutSwapBuffers();
-    glutPostRedisplay();
-}
+    void viewport::baseKeyFunc(unsigned char key, int x, int y) {
+        parent->consoleIO->input(key);
+        if(keyFunc!=nullptr)
+        keyFunc(key, x, y);
+    }
 
-void TriangleDraw(GlObject* obj) {
+    void viewport::baseMouseButtonFunc(int button, int state, int x, int y) {
+        if(mouseButtonFunc!=nullptr)
+        mouseButtonFunc(button, state, x, y);
+    }
 
-    glBegin(GL_TRIANGLE_STRIP);
-    
-    glColor3f(r,g,b);
-    glLineWidth(1);
+    void viewport::baseTimerFunc(int prior) {
 
-    glVertex3f(0, .3, 0);
-    glVertex3f(-.2, 0, -.2);
-    glVertex3f(0, .3, 0);
+        parent->consoleIO->refresh();
 
-    glVertex3f(.2, 0, -.2);
-    glVertex3f(0, .3, 0);
-    glVertex3f(0, 0, .2);
-
-    glVertex3f(-.2, 0, -.2);
-    glVertex3f(.2, 0, -.2);
-    glVertex3f(.2, 0, -.2);
-
-    glVertex3f(0, 0, .2);
-    glVertex3f(0, 0, .2);
-    glVertex3f(-.2, 0, -.2);
-
-    glEnd();
-}
-
-void CubeDraw(GlObject* obj) {
-    glBegin(GL_TRIANGLE_STRIP);
-    glColor3f(1, 0, 0);
-    glVertex3f(-.1f, -.1f, -.1f);
-    glVertex3f(-.1f, .1f, -.1f);
-    glVertex3f(-.1f, -.1f, .1f);
-    glVertex3f(-.1f, .1f, .1f);
-    glEnd();
-
-    glBegin(GL_TRIANGLE_STRIP);
-    glColor3f(0, 1, 0);
-    glVertex3f(-.1f, .1f, -.1f);
-    glVertex3f(-.1f, .1f, .1f);
-    glVertex3f(.1f, .1f, -.1f);
-    glVertex3f(.1f, .1f, .1f);
-    glEnd();
-
-    glBegin(GL_TRIANGLE_STRIP);
-    glColor3f(0, 0, 1);
-    glVertex3f(.1f, -.1f, -.1f);
-    glVertex3f(.1f, .1f, -.1f);
-    glVertex3f(-.1f, -.1f, -.1f);
-    glVertex3f(-.1f, .1f, -.1f);
-    glEnd();
-
-    glBegin(GL_TRIANGLE_STRIP);
-    glColor3f(0, 1, 1);
-    glVertex3f(.1f, -.1f, .1f);
-    glVertex3f(.1f, .1f, .1f);
-    glVertex3f(-.1f, -.1f, .1f);
-    glVertex3f(-.1f, .1f, .1f);
-    glEnd();
-
-    glBegin(GL_TRIANGLE_STRIP);
-    glColor3f(1, 0, 1);
-    glVertex3f(.1f, -.1f, -.1f);
-    glVertex3f(.1f, -.1f, .1f);
-    glVertex3f(-.1f, -.1f, -.1f);
-    glVertex3f(-.1f, -.1f, .1f);
-    glEnd();
-
-    glBegin(GL_TRIANGLE_STRIP);
-    glColor3f(1, 1, 0);
-    glVertex3f(.1f, .1f, -.1f);
-    glVertex3f(.1f, .1f, .1f);
-    glVertex3f(.1f, -.1f, -.1f);
-    glVertex3f(.1f, -.1f, .1f);
-    glEnd();
-
-}
-
-void start() {
-    triangle = new GlObject();
-    triangle->Position = Gl3dVector(.1, .1, .1);
-    triangle->Rotation.vect = Gl3dVector(1, 0.0, 0.0);
-    triangle->Rotation.angle = 45;
-    triangle->draw = TriangleDraw;
-
-    square = new GlObject();
-    square->Position = Gl3dVector(-.1, -.1, -.1);
-    square->Rotation.vect = Gl3dVector(-1, 1, 1);
-    square->draw = CubeDraw;
+        if(timerFunc!=nullptr)
+        timerFunc(prior);
 
 
+        glutTimerFunc(millis,
+            timerCallback,
+            1);
+    }
 
 
-    components.reserve(100);
-    components.push_back(triangle);
-    components.push_back(square);
-    Camera = new GlCamera();
+    void viewport::render() {
+        glLoadIdentity();
+        Camera->cameraMove();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glBegin(GL_LINES);
+        glLineWidth(.3);
+        glColor3f(1, 0, 0);
+        glVertex3f(-10, 0, 0);
+        glVertex3f(10, 0, 0);
+        glColor3f(0, 10, 0);
+        glVertex3f(0, -10, 0);
+        glVertex3f(0, 10, 0);
+        glColor3f(0, 0, 10);
+        glVertex3f(0, 0, -10);
+        glVertex3f(0, 0, 10);
+        glEnd();
 
-}
+        for (gl_object* t : components)
+        {
+            t->render();
+        }
 
-int mainView(int argc, char **argv)
-{
+        parent->consoleIO->render();
 
-    start();
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
-    glutInitWindowSize(resolutionX, resolutionY);
-    glutInitWindowPosition(500, 500);
-    glutCreateWindow("example");
-    glutKeyboardFunc(keyFunc);
-    glutMotionFunc(mousePosFunc);
-    glutMouseFunc(mouseButtonFunc);
-    glutTimerFunc(30, timerFunc, 1);
-    glutDisplayFunc(render);
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
-    glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
-    glutMainLoop();
-    return 1;
+        glutSwapBuffers();
+        glutPostRedisplay();
+    }
+
+    void viewport::start() {
+        components.reserve(100);
+        Camera = new gl_camera();
+    }
+
+    viewport* viewport::GetInstance(obj_viewer* parent,int argc, char **argv)
+    {
+        if (instance == NULL)
+        {
+            instance = new viewport(parent,argc, argv);
+        }
+        return instance;
+    }
+
+    void viewport::drawText(float WinPosX, float WinPosY, const char* strMsg, gl_vec_3f color, void* font)
+    {
+        double FontWidth = 0.02;
+        glColor3f(color.x,color.y,color.z);
+
+        int len = (int)strlen(strMsg);
+        glRasterPos2f(WinPosX,WinPosY);
+        for (int i = 0; i < len; ++i)
+        {
+            glutBitmapCharacter(font, strMsg[i]);
+        }
+    }
+
+
+    viewport::viewport(obj_viewer* parent,int argc, char **argv)
+    {
+        this->parent=parent;
+        millis=30;
+        start();
+        glutInit(&argc, argv);
+        glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+        glutInitWindowSize(resolutionX, resolutionY);
+        glutInitWindowPosition(500, 500);
+        glutCreateWindow("example");
+        glutKeyboardFunc(keyCallback);
+        glutMotionFunc(mousePosCallback);
+        glutMouseFunc(mouseButtonCallback);
+        glutTimerFunc(30, timerCallback, 1);
+        glutDisplayFunc(renderCallback);
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LESS);
+        glOrtho(-1.0, 1.0, -1.0, 1.0, -10.0, 10.0);
+    }
 }
