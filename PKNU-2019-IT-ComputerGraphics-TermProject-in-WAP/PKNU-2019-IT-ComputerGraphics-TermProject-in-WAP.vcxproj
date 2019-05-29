@@ -121,16 +121,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="ModelViewer\GlVectors.cpp" />
-    <ClCompile Include="ModelViewer\GlCamera.cpp" />
-    <ClCompile Include="ModelViewer\GlObject.cpp" />
-    <ClCompile Include="ModelViewer\ModelViewer.cpp" />
-    <ClCompile Include="ModelViewer\Viewport.cpp" />
+    <ClCompile Include="ModelViewer\gl_Vectors.cpp" />
+    <ClCompile Include="ModelViewer\gl_Camera.cpp" />
+    <ClCompile Include="ModelViewer\gl_Object.cpp" />
+    <ClCompile Include="ModelViewer\obj_reader.cpp" />
+    <ClCompile Include="ModelViewer\obj_viewer.cpp" />
+    <ClCompile Include="ModelViewer\viewport.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ModelViewer\GlObject.hpp" />
-    <ClInclude Include="ModelViewer\ModelViewer.hpp" />
-    <ClInclude Include="ModelViewer\Viewport.hpp" />
+    <ClInclude Include="ModelViewer\gl_Camera.hpp" />
+    <ClInclude Include="ModelViewer\gl_Object.hpp" />
+    <ClInclude Include="ModelViewer\gl_Vectors.hpp" />
+    <ClInclude Include="ModelViewer\obj_viewer.hpp" />
+    <ClInclude Include="ModelViewer\obj_reader.hpp" />
+    <ClInclude Include="ModelViewer\viewport.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

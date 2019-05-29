@@ -1,14 +1,16 @@
 #pragma once
 #include <vector>
-#include "GlObject.hpp"
-namespace viewport {
-    using namespace GlVector;
+#include "gl_object.hpp"
+#include "gl_Camera.hpp"
+
+namespace model_viewer {
+    using namespace advanced_gl;
     using namespace std;
-    class Viewport {
+    class viewport {
     public:
 
-        GlCamera* Camera;
-        vector<GlObject*> components;
+        gl_camera* Camera;
+        vector<gl_object*> components;
         int resolutionX = 500, resolutionY = 500;
         int postX = resolutionX / 2, postY = resolutionX / 2;
 
@@ -25,10 +27,10 @@ namespace viewport {
         void render();
         void start();
 
-        static Viewport* GetInstance(int, char**);
-        static Viewport* instance;
+        static viewport* GetInstance(int, char**);
+        static viewport* instance;
     private:
-        Viewport(int argc, char **argv);
+        viewport(int argc, char **argv);
     };
 
 }
