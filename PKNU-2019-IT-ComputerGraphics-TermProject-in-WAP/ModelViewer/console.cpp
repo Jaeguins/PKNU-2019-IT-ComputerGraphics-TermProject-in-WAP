@@ -8,7 +8,7 @@ namespace model_viewer
 {
     void console::input(const unsigned char in)
     {
-        if(in==8)if(input_buffer->size()>1)input_buffer->pop_back();
+        if(in==8){if(input_buffer->size()>1)input_buffer->pop_back();}
         else if (in == 13)process();
         else (*input_buffer) += in;
     }
