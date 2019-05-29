@@ -30,32 +30,29 @@
     <ClCompile Include="ModelViewer\obj_viewer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ModelViewer\gl_Vectors.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ModelViewer\gl_Object.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ModelViewer\gl_Camera.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="ModelViewer\viewport.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="ModelViewer\obj_reader.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="ModelViewer\gl_camera.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelViewer\gl_object.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelViewer\gl_vectors.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelViewer\console.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelViewer\string_split.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ModelViewer\gl_Vectors.hpp">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelViewer\gl_Object.hpp">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelViewer\gl_Camera.hpp">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="ModelViewer\viewport.hpp">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -63,6 +60,21 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="ModelViewer\obj_viewer.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelViewer\gl_camera.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelViewer\gl_object.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelViewer\gl_vectors.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelViewer\console.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelViewer\string_split.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

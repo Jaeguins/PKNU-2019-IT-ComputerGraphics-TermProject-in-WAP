@@ -1,7 +1,7 @@
 #pragma once
-#include<GL/glut.h>
-#include"gl_vectors.hpp"
 #include<vector>
+#include "gl_vectors.hpp"
+
 namespace advanced_gl {
     //오브젝트 하나에 대한 클래스
     class gl_object {

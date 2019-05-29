@@ -121,19 +121,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="ModelViewer\gl_Vectors.cpp" />
-    <ClCompile Include="ModelViewer\gl_Camera.cpp" />
-    <ClCompile Include="ModelViewer\gl_Object.cpp" />
+    <ClCompile Include="ModelViewer\console.cpp" />
+    <ClCompile Include="ModelViewer\gl_vectors.cpp" />
+    <ClCompile Include="ModelViewer\gl_camera.cpp" />
+    <ClCompile Include="ModelViewer\gl_object.cpp" />
     <ClCompile Include="ModelViewer\obj_reader.cpp" />
     <ClCompile Include="ModelViewer\obj_viewer.cpp" />
+    <ClCompile Include="ModelViewer\string_split.cpp" />
     <ClCompile Include="ModelViewer\viewport.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ModelViewer\gl_Camera.hpp" />
-    <ClInclude Include="ModelViewer\gl_Object.hpp" />
-    <ClInclude Include="ModelViewer\gl_Vectors.hpp" />
+    <ClInclude Include="ModelViewer\console.hpp" />
+    <ClInclude Include="ModelViewer\gl_camera.hpp" />
+    <ClInclude Include="ModelViewer\gl_object.hpp" />
+    <ClInclude Include="ModelViewer\gl_vectors.hpp" />
     <ClInclude Include="ModelViewer\obj_viewer.hpp" />
     <ClInclude Include="ModelViewer\obj_reader.hpp" />
+    <ClInclude Include="ModelViewer\string_split.h" />
     <ClInclude Include="ModelViewer\viewport.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

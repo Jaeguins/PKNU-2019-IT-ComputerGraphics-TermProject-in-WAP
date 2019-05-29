@@ -1,36 +1,24 @@
 #include "obj_reader.hpp"
-
-
-
-namespace std {
-    vector<string> split(string str, char delimiter) {
-        vector<string> internal;
-        stringstream ss(str);
-        string temp;
-
-        while (getline(ss, temp, delimiter)) {
-            internal.push_back(temp);
-        }
-
-        return internal;
-    }
-}
-
+#include <vector>
+#include <fstream>
+#include <string>
+#include "string_split.h"
+#include "gl_object.hpp"
 
 namespace model_viewer
 {
     using namespace std;
-    obj_reader::obj_reader(char* path)
+    obj_reader::obj_reader(const char* path)
     {
         this->load(path);
     }
-
-    bool obj_reader::load(char* path)
+    
+    bool obj_reader::load(const char* path)
     {
-        this->path = path;
+        strcpy_s(this->path,strlen(path),path);
         vector<gl_vec_3f> temp_vertices, temp_normals;
         vector<gl_vec_2f> temp_uvs;
-        vector<GlFace> temp_faces;
+        vector<gl_face> temp_faces;
         ifstream file(path);
         if (!file.is_open())
         {
@@ -63,7 +51,7 @@ namespace model_viewer
                 temp_normals.push_back(normal);
             }
             else if (word[0] == "f") {
-                GlFace face;
+                gl_face face;
                 if (word.size() != 4) {
                     return false;
                 }

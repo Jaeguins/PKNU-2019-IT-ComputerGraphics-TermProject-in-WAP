@@ -1,9 +1,13 @@
-#include <stdio.h>
 #include <GL/glut.h>
 #include "gl_object.hpp"
 #include "viewport.hpp"
 #include <vector>
 #include <functional>
+#include "gl_camera.hpp"
+#include "console.hpp"
+#include "obj_viewer.hpp"
+
+
 namespace model_viewer {
     extern "C"
         using namespace std;
@@ -38,44 +42,30 @@ namespace model_viewer {
             postX = x;
             postY = y;
         }
+        if(mousePosFunc!=nullptr)
         mousePosFunc(x, y);
     }
 
     void viewport::baseKeyFunc(unsigned char key, int x, int y) {
-        switch (key) {
-        case 'a':
-            Camera->Position.x -= .01f;
-            break;
-        case 'd':
-            Camera->Position.x += .01f;
-            break;
-        case 'q':
-            Camera->Position.y -= .01f;
-            break;
-        case 'e':
-            Camera->Position.y += .01f;
-            break;
-        case 'w':
-            Camera->Position.z -= .01f;
-            break;
-        case 's':
-            Camera->Position.z += .01f;
-            break;
-        }
+        parent->consoleIO->input(key);
+        if(keyFunc!=nullptr)
         keyFunc(key, x, y);
     }
 
     void viewport::baseMouseButtonFunc(int button, int state, int x, int y) {
+        if(mouseButtonFunc!=nullptr)
         mouseButtonFunc(button, state, x, y);
     }
 
     void viewport::baseTimerFunc(int prior) {
 
+        parent->consoleIO->refresh();
 
+        if(timerFunc!=nullptr)
         timerFunc(prior);
 
 
-        glutTimerFunc(30,
+        glutTimerFunc(millis,
             timerCallback,
             1);
     }
@@ -103,6 +93,8 @@ namespace model_viewer {
             t->render();
         }
 
+        parent->consoleIO->render();
+
         glutSwapBuffers();
         glutPostRedisplay();
     }
@@ -112,17 +104,33 @@ namespace model_viewer {
         Camera = new gl_camera();
     }
 
-    viewport* viewport::GetInstance(int argc, char **argv)
+    viewport* viewport::GetInstance(obj_viewer* parent,int argc, char **argv)
     {
         if (instance == NULL)
         {
-            instance = new viewport(argc, argv);
+            instance = new viewport(parent,argc, argv);
         }
         return instance;
     }
 
-    viewport::viewport(int argc, char **argv)
+    void viewport::drawText(float WinPosX, float WinPosY, const char* strMsg, gl_vec_3f color, void* font)
     {
+        double FontWidth = 0.02;
+        glColor3f(color.x,color.y,color.z);
+
+        int len = (int)strlen(strMsg);
+        glRasterPos2f(WinPosX,WinPosY);
+        for (int i = 0; i < len; ++i)
+        {
+            glutBitmapCharacter(font, strMsg[i]);
+        }
+    }
+
+
+    viewport::viewport(obj_viewer* parent,int argc, char **argv)
+    {
+        this->parent=parent;
+        millis=30;
         start();
         glutInit(&argc, argv);
         glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
@@ -137,6 +145,5 @@ namespace model_viewer {
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
         glOrtho(-1.0, 1.0, -1.0, 1.0, -10.0, 10.0);
-        glutMainLoop();
     }
 }

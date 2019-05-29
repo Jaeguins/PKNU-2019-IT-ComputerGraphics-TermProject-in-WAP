@@ -1,24 +1,30 @@
 #pragma once
-#include <vector>
-#include "gl_object.hpp"
-#include "obj_reader.hpp"
-#include "viewport.hpp"
+#include <string>
+
+
+namespace advanced_gl {
+    class gl_object;
+}
 
 namespace model_viewer
 {
-    using namespace advanced_gl;
+    class viewport;
+    class obj_reader;
 
-    
+    using namespace advanced_gl;
+    using namespace std;
+
+    class console;
 
     class obj_viewer
     {
     public:
         viewport* view;
         obj_reader* read_object;
-        gl_object* converted;
+        console* consoleIO;
+        void load(string filename);
         void convert();
-        void read(string filename);
-        void clear();
+        void clear() const;
         obj_viewer(int,char**);
     };
 }

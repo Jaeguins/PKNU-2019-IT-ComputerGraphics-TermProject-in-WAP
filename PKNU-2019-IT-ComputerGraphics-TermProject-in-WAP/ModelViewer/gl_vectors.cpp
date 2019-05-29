@@ -90,4 +90,5 @@ namespace advanced_gl {
     }
 
     gl_vec_2f gl_vec_2f::zero = gl_vec_2f(0, 0);
+
 }

@@ -1,7 +1,9 @@
 #pragma once
-#include <Gl/glut.h>
+#include <GL/glut.h>
+
 namespace advanced_gl
 {
+    //3차원 벡터 구조체
     struct gl_vec_3f {
         GLfloat x, y, z;
         gl_vec_3f(GLfloat x, GLfloat y, GLfloat z);
@@ -32,7 +34,7 @@ namespace advanced_gl
         static gl_vec_2f zero;
     };
     //면에 대한 구조체
-    struct GlFace
+    struct gl_face
     {
         //폴리곤 점
         gl_vec_3f vertices[3];
@@ -40,7 +42,7 @@ namespace advanced_gl
         gl_vec_2f uvs[3];
         //법선벡터
         gl_vec_3f normals[3];
-        GlFace();
+
     };
 
     //회전 구조체
@@ -49,5 +51,3 @@ namespace advanced_gl
         float angle = 0.0f;
     };
 }
-    //3차원 벡터 구조체
-    
