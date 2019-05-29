@@ -13,9 +13,9 @@ namespace model_viewer
     class obj_viewer
     {
     public:
-        viewport* viewport;
-        obj_reader readed;
-        gl_object converted;
+        viewport* view;
+        obj_reader* read_object;
+        gl_object* converted;
         void convert();
         void read(string filename);
         void clear();

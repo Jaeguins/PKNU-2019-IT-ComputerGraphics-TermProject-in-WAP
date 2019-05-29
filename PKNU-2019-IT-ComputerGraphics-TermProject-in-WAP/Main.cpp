@@ -1,10 +1,10 @@
 #include<iostream>
 #include<GL/glut.h>
-#include "ModelViewer/ModelViewer.hpp"
+#include "ModelViewer/obj_viewer.hpp"
 
 
 int main(int argc,char* argv[])
 {
-    std::cout<<"HelloWorld!\n";
+    model_viewer::obj_viewer viewer(argc,argv);
     system("pause");
 }
