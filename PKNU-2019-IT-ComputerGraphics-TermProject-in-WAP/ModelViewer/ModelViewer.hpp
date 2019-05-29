@@ -1,33 +1,33 @@
 #pragma once
-#include <iostream>
 #include <vector>
-
-namespace model_Viewer
+#include "GlObject.hpp"
+#include "Viewport.hpp"
+namespace ModelViewer
 {
-    struct vec3
-    {
-        float x=0,y=0,z=0;
-    };
-    struct vec2
-    {
-        float x=0,y=0;
-    };
-    struct face
-    {
-        vec3 vertices[3];
-        vec2 uvs[3];
-        vec3 normals[3];
-    };
+    using namespace GlVector;
+    using namespace viewport;
+
     class obj_reader
     {
     public:
         obj_reader(char* path);
         bool load(char* path);
-        char* path=nullptr;
-        std::vector<vec3>vertices;
-        std::vector<vec2>uvs;
-        std::vector<vec3>normals;
-        std::vector<face>faces;
-        
+        char* path = nullptr;
+        std::vector<GlVec3f>vertices;
+        std::vector<GlVec2f>uvs;
+        std::vector<GlVec3f>normals;
+        std::vector<GlFace>faces;
+    };
+
+    class obj_viewer
+    {
+    public:
+        Viewport* viewport;
+        obj_reader readed;
+        GlObject converted;
+        void Convert();
+        void read(string filename);
+        void clear();
+        obj_viewer(int,char**);
     };
 }

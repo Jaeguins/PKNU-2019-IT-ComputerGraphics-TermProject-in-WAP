@@ -36,10 +36,10 @@
     <ClCompile Include="ModelViewer\Viewport.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ModelViewer\Gl3dVector.cpp">
+    <ClCompile Include="ModelViewer\GlCamera.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ModelViewer\GlCamera.cpp">
+    <ClCompile Include="ModelViewer\GlVectors.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

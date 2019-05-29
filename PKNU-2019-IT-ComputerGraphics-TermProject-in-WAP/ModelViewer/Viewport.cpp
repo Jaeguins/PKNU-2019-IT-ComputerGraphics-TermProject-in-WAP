@@ -1,19 +1,48 @@
 #include <stdio.h>
 #include <GL/glut.h>
 #include "GlObject.hpp"
+#include "Viewport.hpp"
 #include <vector>
+#include <functional>
+
+extern "C"
 using namespace std;
-int resolutionX = 500, resolutionY = 500;
-int postX = resolutionX / 2, postY = resolutionX / 2;
-int t = 0;
+using namespace viewport;
 
-float r = 1, g = 0, b = 0;
-int flag = 0;
+void timerCallback(int prior)
+{
+    Viewport::instance->baseTimerFunc(prior);
+}
+void renderCallback()
+{
+    Viewport::instance->render();
+}
+void mousePosCallback(int x,int y)
+{
+    Viewport::instance->baseMousePosFunc(x,y);
+}
+void keyCallback(unsigned char key,int x,int y)
+{
+    Viewport::instance->baseKeyFunc(key, x, y);
+}
+void mouseButtonCallback(int button, int state, int x, int y)
+{
+    Viewport::instance->baseMouseButtonFunc(button, state, x, y);
+}
 
-GlObject *triangle, *square, *sphere;
-GlCamera* Camera;
-vector<GlObject*> components;
-void keyFunc(unsigned char key, int x, int y) {
+Viewport* Viewport::instance=nullptr;
+
+void Viewport::baseMousePosFunc(int x, int y) {
+    {
+        Camera->xAngle += ((x - postX)) / (resolutionX / 2.0) * 90;
+        Camera->yAngle += ((postY - y)) / (resolutionY / 2.0) * 90;
+        postX = x;
+        postY = y;
+    }
+    mousePosFunc(x,y);
+}
+
+void Viewport::baseKeyFunc(unsigned char key, int x, int y) {
     switch (key) {
     case 'a':
         Camera->Position.x -= .01f;
@@ -34,60 +63,29 @@ void keyFunc(unsigned char key, int x, int y) {
         Camera->Position.z += .01f;
         break;
     }
-}
-void mousePosFunc(int x, int y) {
-    Camera->xAngle += ((x - postX)) / (resolutionX / 2.0) * 90;
-    Camera->yAngle += ((postY - y)) / (resolutionY / 2.0) * 90;
-    postX = x;
-    postY = y;
-}
-void mouseButtonFunc(int button, int state, int x, int y) {
-}
-void timerFunc(int prior) {
-    t = t >= 360 ? 0 : t += 5;
-    triangle->Scale = Gl3dVector(1, 1, 1)*(-abs(t-180) / 180.0);
-    square->Rotation.angle = t;
-    switch (flag) {
-    case 0:
-        r -= .001;
-        g += .001;
-        if (r < 0) {
-            r = 0;
-            g = 1;
-            flag = flag + 1 % 3;
-        }
-        break;
-    case 1:
-        g -= .001;
-        b += .001;
-        if (g < 0) {
-            g = 0;
-            b = 1;
-            flag = flag + 1 % 3;
-        }
-        break;
-    case 2:
-        b -= .001;
-        r += .001;
-        if (b < 0) {
-            b = 0;
-            r = 1;
-            flag = flag + 1 % 3;
-        }
-        break;
-    }
-
-    
-    glutTimerFunc(30, timerFunc, 1);
+    keyFunc(key,x,y);
 }
 
-void render() {
+void Viewport::baseMouseButtonFunc(int button, int state, int x, int y) {
+    mouseButtonFunc(button,state,x,y);
+}
+
+void Viewport::baseTimerFunc(int prior) {
+
+
+    timerFunc(prior);
+
+
+    glutTimerFunc(30,
+        timerCallback,
+        1);
+}
+
+
+void Viewport::render() {
     glLoadIdentity();
     Camera->cameraMove();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    for (vector<GlObject>::size_type i = 0; i < components.size(); i++) {
-        components[i]->render();
-    }
     glBegin(GL_LINES);
     glLineWidth(.3);
     glColor3f(1, 0, 0);
@@ -101,126 +99,45 @@ void render() {
     glVertex3f(0, 0, 10);
     glEnd();
 
+    for(GlObject* t :components)
+    {
+        t->render();
+    }
+
     glutSwapBuffers();
     glutPostRedisplay();
 }
 
-void TriangleDraw(GlObject* obj) {
-
-    glBegin(GL_TRIANGLE_STRIP);
-    
-    glColor3f(r,g,b);
-    glLineWidth(1);
-
-    glVertex3f(0, .3, 0);
-    glVertex3f(-.2, 0, -.2);
-    glVertex3f(0, .3, 0);
-
-    glVertex3f(.2, 0, -.2);
-    glVertex3f(0, .3, 0);
-    glVertex3f(0, 0, .2);
-
-    glVertex3f(-.2, 0, -.2);
-    glVertex3f(.2, 0, -.2);
-    glVertex3f(.2, 0, -.2);
-
-    glVertex3f(0, 0, .2);
-    glVertex3f(0, 0, .2);
-    glVertex3f(-.2, 0, -.2);
-
-    glEnd();
-}
-
-void CubeDraw(GlObject* obj) {
-    glBegin(GL_TRIANGLE_STRIP);
-    glColor3f(1, 0, 0);
-    glVertex3f(-.1f, -.1f, -.1f);
-    glVertex3f(-.1f, .1f, -.1f);
-    glVertex3f(-.1f, -.1f, .1f);
-    glVertex3f(-.1f, .1f, .1f);
-    glEnd();
-
-    glBegin(GL_TRIANGLE_STRIP);
-    glColor3f(0, 1, 0);
-    glVertex3f(-.1f, .1f, -.1f);
-    glVertex3f(-.1f, .1f, .1f);
-    glVertex3f(.1f, .1f, -.1f);
-    glVertex3f(.1f, .1f, .1f);
-    glEnd();
-
-    glBegin(GL_TRIANGLE_STRIP);
-    glColor3f(0, 0, 1);
-    glVertex3f(.1f, -.1f, -.1f);
-    glVertex3f(.1f, .1f, -.1f);
-    glVertex3f(-.1f, -.1f, -.1f);
-    glVertex3f(-.1f, .1f, -.1f);
-    glEnd();
-
-    glBegin(GL_TRIANGLE_STRIP);
-    glColor3f(0, 1, 1);
-    glVertex3f(.1f, -.1f, .1f);
-    glVertex3f(.1f, .1f, .1f);
-    glVertex3f(-.1f, -.1f, .1f);
-    glVertex3f(-.1f, .1f, .1f);
-    glEnd();
-
-    glBegin(GL_TRIANGLE_STRIP);
-    glColor3f(1, 0, 1);
-    glVertex3f(.1f, -.1f, -.1f);
-    glVertex3f(.1f, -.1f, .1f);
-    glVertex3f(-.1f, -.1f, -.1f);
-    glVertex3f(-.1f, -.1f, .1f);
-    glEnd();
-
-    glBegin(GL_TRIANGLE_STRIP);
-    glColor3f(1, 1, 0);
-    glVertex3f(.1f, .1f, -.1f);
-    glVertex3f(.1f, .1f, .1f);
-    glVertex3f(.1f, -.1f, -.1f);
-    glVertex3f(.1f, -.1f, .1f);
-    glEnd();
-
-}
-
-void start() {
-    triangle = new GlObject();
-    triangle->Position = Gl3dVector(.1, .1, .1);
-    triangle->Rotation.vect = Gl3dVector(1, 0.0, 0.0);
-    triangle->Rotation.angle = 45;
-    triangle->draw = TriangleDraw;
-
-    square = new GlObject();
-    square->Position = Gl3dVector(-.1, -.1, -.1);
-    square->Rotation.vect = Gl3dVector(-1, 1, 1);
-    square->draw = CubeDraw;
-
-
-
-
+void Viewport::start() {
     components.reserve(100);
-    components.push_back(triangle);
-    components.push_back(square);
     Camera = new GlCamera();
-
 }
 
-int mainView(int argc, char **argv)
+Viewport* Viewport::GetInstance(int argc, char **argv)
 {
+    if (instance == NULL)
+    {
+        instance = new Viewport(argc, argv);
+    }
+    return instance;
+}
 
+Viewport::Viewport(int argc, char **argv)
+{
     start();
+    this->Camera=new GlCamera();
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
     glutInitWindowSize(resolutionX, resolutionY);
     glutInitWindowPosition(500, 500);
     glutCreateWindow("example");
-    glutKeyboardFunc(keyFunc);
-    glutMotionFunc(mousePosFunc);
-    glutMouseFunc(mouseButtonFunc);
-    glutTimerFunc(30, timerFunc, 1);
-    glutDisplayFunc(render);
+    glutKeyboardFunc(keyCallback);
+    glutMotionFunc(mousePosCallback);
+    glutMouseFunc(mouseButtonCallback);
+    glutTimerFunc(30, timerCallback, 1);
+    glutDisplayFunc(renderCallback);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-    glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
+    glOrtho(-1.0, 1.0, -1.0, 1.0, -10.0, 10.0);
     glutMainLoop();
-    return 1;
 }
