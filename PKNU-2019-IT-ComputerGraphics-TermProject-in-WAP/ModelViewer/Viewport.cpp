@@ -9,8 +9,7 @@
 
 
 namespace model_viewer {
-    extern "C"
-        using namespace std;
+    using namespace std;
 
     void timerCallback(int prior)
     {
@@ -74,14 +73,14 @@ namespace model_viewer {
     }
 
 
-    void viewport::log(string data)
+    void viewport::log(string data,float time)
     {
-        parent->log(data);
+        parent->log(data,time);
     }
 
     void viewport::render() {
         glLoadIdentity();
-        glOrtho(-resolutionX/160.f, resolutionX/160.f, -resolutionY/160.f, resolutionY/160.f, -100.0, 100.0);
+        glOrtho(-resolutionX / 160.f, resolutionX / 160.f, -resolutionY / 160.f, resolutionY / 160.f, -100.0, 100.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         parent->consoleIO->render();
         Camera->cameraMove();

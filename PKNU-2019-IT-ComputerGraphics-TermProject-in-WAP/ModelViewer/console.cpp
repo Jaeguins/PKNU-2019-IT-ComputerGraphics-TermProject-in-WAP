@@ -4,36 +4,62 @@
 #include "viewport.hpp"
 #include "obj_viewer.hpp"
 #include "string_split.h"
+#include "gl_camera.hpp"
 
 namespace model_viewer
 {
     void console::input(const unsigned char in)
     {
-        if(in==8){if(input_buffer->size()>0)input_buffer->pop_back();}
+        if (in == 8) { if (input_buffer->size() > 0)input_buffer->pop_back(); }
         else if (in == 13)process();
         else (*input_buffer) += in;
     }
-    void console::log(string content){
+    void console::log(string content, float time) {
         output_buffer->push_back(content);
-        removal_buffer->push_back(removal_time);
+        removal_buffer->push_back(time == -1 ? removal_time : time);
     }
     void console::process()
     {
-        string t=*input_buffer;
+        string t = *input_buffer;
         output_buffer->push_back(t);
         removal_buffer->push_back(removal_time);
         vector<string> args = std::split(input_buffer->c_str(), ' ');
         input_buffer->clear();
         //TODO args에 따라 명령 처리
-        if(args.size()==2&&!args[0].compare("open")){
-            parent->load(args[1]);
+        switch (args.size()) {
+        case 1:
+            if (!args[0].compare("identify")) {
+                gl_camera* cam = parent->view->Camera;
+                cam->Position = gl_vec_3f();
+                cam->xAngle = 0;
+                cam->yAngle = 0;
+                log("Rotation set to default.");
+            }
+            else if (!args[0].compare("help")) {
+                float helpShowTime = 10000;
+                log("", helpShowTime);
+                log("identify [] : Reset rotation", helpShowTime);
+                log("obj [file path] : open .obj file", helpShowTime);
+                log("help [] : Show this message", helpShowTime);
+                log("", helpShowTime);
+                log("commands :", helpShowTime);
+            }
+            break;
+        case 2:
+            if (!args[0].compare("obj")) {
+                parent->load(args[1]);
+            }
+            break;
+        case 3:
+            break;
         }
+
     }
 
     void console::render()
     {
-        float WinPosX=-parent->view->resolutionX/160.f;
-        float WinPosY = parent->view->resolutionY/160.f*.9f, diff = parent->view->resolutionY/160.f*.05f;
+        float WinPosX = -parent->view->resolutionX / 160.f;
+        float WinPosY = parent->view->resolutionY / 160.f*.9f, diff = parent->view->resolutionY / 160.f*.05f;
         view->drawText(WinPosX, WinPosY, input_buffer->c_str());
         WinPosY -= diff;
         auto strit = output_buffer->rbegin();
@@ -43,8 +69,8 @@ namespace model_viewer
             WinPosY -= diff;
             ++strit;
         }
-        if(output_buffer->size()<1)
-            view->drawText(WinPosX,WinPosY,"type 'help' to see commands.");
+        if (output_buffer->size() < 1)
+            view->drawText(WinPosX, WinPosY, "type 'help' to see commands.");
     }
 
     void console::refresh()
@@ -77,7 +103,7 @@ namespace model_viewer
         output_buffer = new list<string>;
         removal_buffer = new list<float>;
     }
-    
+
     console::~console()
     {
         delete(input_buffer);

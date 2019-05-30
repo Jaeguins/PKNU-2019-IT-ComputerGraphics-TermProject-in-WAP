@@ -23,7 +23,7 @@ namespace model_viewer
         console* consoleIO;
         void load(string filename);
         void clear() const;
-        void log(string);
+        void log(string data,float time=-1);
         obj_viewer(int,char**);
     };
 }

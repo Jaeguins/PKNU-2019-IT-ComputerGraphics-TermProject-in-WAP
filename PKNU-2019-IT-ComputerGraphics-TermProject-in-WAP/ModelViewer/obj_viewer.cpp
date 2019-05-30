@@ -23,9 +23,9 @@ namespace model_viewer
         }
         delete(read_object);
     }
-    void obj_viewer::log(string data)
+    void obj_viewer::log(string data,float time)
     {
-        consoleIO->log(data);
+        consoleIO->log(data,time);
     }
     obj_viewer::obj_viewer(int argc, char** argv)
     {

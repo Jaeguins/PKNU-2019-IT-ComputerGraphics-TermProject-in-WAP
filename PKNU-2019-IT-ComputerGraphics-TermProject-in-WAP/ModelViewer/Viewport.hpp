@@ -31,7 +31,7 @@ namespace model_viewer {
         void drawText(float WinPosX, float WinPosY, const char* strMsg, gl_vec_3f color = gl_vec_3f(1.0f, 1.0f, 1.0f), void* font =
             GLUT_BITMAP_8_BY_13);
 
-        void log(string data);
+        void log(string data,float time=-1);
         void render();
         void start();
 
