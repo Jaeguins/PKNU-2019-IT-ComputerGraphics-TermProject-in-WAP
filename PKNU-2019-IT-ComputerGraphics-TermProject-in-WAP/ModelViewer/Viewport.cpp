@@ -36,8 +36,8 @@ namespace model_viewer {
 
     void viewport::baseMousePosFunc(int x, int y) {
         {
-            Camera->xAngle += ((postX - x)) / (resolutionX / 2.0) * 90;
-            Camera->yAngle += ((y - postY)) / (resolutionY / 2.0) * 90;
+            camera->xAngle += ((postX - x)) / (resolutionX / 2.0) * 90;
+            camera->yAngle += ((y - postY)) / (resolutionY / 2.0) * 90;
             postX = x;
             postY = y;
         }
@@ -47,7 +47,19 @@ namespace model_viewer {
 
 
     void viewport::baseKeyFunc(unsigned char key, int x, int y) {
-        parent->consoleIO->input(key);
+        switch (key)
+        {
+        case '=':
+            camera->magnify+=.05f;
+            break;
+        case '-':
+            camera->magnify-=.05f;
+            break;
+        default:
+            parent->consoleIO->input(key);
+            break;
+        }
+
         if (keyFunc != nullptr)
             keyFunc(key, x, y);
     }
@@ -73,9 +85,9 @@ namespace model_viewer {
     }
 
 
-    void viewport::log(string data,float time)
+    void viewport::log(string data, float time)
     {
-        parent->log(data,time);
+        parent->log(data, time);
     }
 
     void viewport::render() {
@@ -83,7 +95,7 @@ namespace model_viewer {
         glOrtho(-resolutionX / 160.f, resolutionX / 160.f, -resolutionY / 160.f, resolutionY / 160.f, -100.0, 100.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         parent->consoleIO->render();
-        Camera->cameraMove();
+        camera->cameraMove();
         glBegin(GL_LINES);
         glLineWidth(.3);
         glColor3f(1, 0, 0);
@@ -108,7 +120,7 @@ namespace model_viewer {
 
     void viewport::start() {
         components.reserve(100);
-        Camera = new gl_camera();
+        camera = new gl_camera();
     }
 
     viewport* viewport::GetInstance(obj_viewer* parent, int argc, char **argv)

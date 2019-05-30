@@ -5,6 +5,7 @@ namespace advanced_gl {
     {
         glRotatef(yAngle, 1, 0, 0);
         glRotatef(xAngle, 0, -1, 0);
+        glScalef(magnify,magnify,magnify);
         glTranslatef(Position.x, Position.y, Position.z);
     }
 }

@@ -15,6 +15,7 @@ namespace model_viewer
     class obj_reader :public gl_object
     {
     public:
+        float x_max,x_min,y_max,y_min,z_max,z_min;
         obj_reader(viewport* parent, const char* path);
         viewport* parent;
         bool load(string path);

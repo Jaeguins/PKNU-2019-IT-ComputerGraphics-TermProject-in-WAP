@@ -29,8 +29,8 @@ namespace model_viewer
         switch (args.size()) {
         case 1:
             if (!args[0].compare("identify")) {
-                gl_camera* cam = parent->view->Camera;
-                cam->Position = gl_vec_3f();
+                gl_camera* cam = parent->view->camera;
+                cam->Position = zero3f;
                 cam->xAngle = 0;
                 cam->yAngle = 0;
                 log("Rotation set to default.");
@@ -38,6 +38,7 @@ namespace model_viewer
             else if (!args[0].compare("help")) {
                 float helpShowTime = 10000;
                 log("", helpShowTime);
+                log("+ or - : zoom in/out",helpShowTime);
                 log("identify [] : Reset rotation", helpShowTime);
                 log("obj [file path] : open .obj file", helpShowTime);
                 log("help [] : Show this message", helpShowTime);

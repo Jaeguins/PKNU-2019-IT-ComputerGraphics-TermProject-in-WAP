@@ -15,7 +15,7 @@ namespace model_viewer {
     public:
         int millis;
         obj_viewer* parent;
-        gl_camera* Camera;
+        gl_camera* camera;
         vector<gl_object*> components;
         int resolutionX = 1280, resolutionY = 720;
         int postX = resolutionX / 2, postY = resolutionX / 2;
