@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 
-
 namespace advanced_gl {
     class gl_object;
 }
@@ -23,8 +22,8 @@ namespace model_viewer
         obj_reader* read_object;
         console* consoleIO;
         void load(string filename);
-        void convert();
         void clear() const;
+        void log(string);
         obj_viewer(int,char**);
     };
 }

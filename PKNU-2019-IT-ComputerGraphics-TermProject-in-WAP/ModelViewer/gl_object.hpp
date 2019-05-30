@@ -1,6 +1,9 @@
 #pragma once
+#ifndef GLOBJECTH
+#define GLOBJECTH
 #include<vector>
 #include "gl_vectors.hpp"
+
 
 namespace advanced_gl {
     //오브젝트 하나에 대한 클래스
@@ -28,3 +31,4 @@ namespace advanced_gl {
         std::string str;
     };
 }
+#endif

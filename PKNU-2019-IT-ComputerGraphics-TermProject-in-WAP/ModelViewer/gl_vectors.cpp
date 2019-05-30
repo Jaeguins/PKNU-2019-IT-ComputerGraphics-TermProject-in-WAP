@@ -91,4 +91,16 @@ namespace advanced_gl {
 
     gl_vec_2f gl_vec_2f::zero = gl_vec_2f(0, 0);
 
+    void glVertexVector(gl_vec_3f vec){
+        glVertex3f(vec.x,vec.y,vec.z);
+    }
+
+    void glVertexVector(gl_vec_2f vec){
+        glVertex2f(vec.x,vec.y);
+    }
+
+    void glFace(gl_face face){
+        for(int i=0;i<3;i++)
+            glVertexVector(face.vertices[i]);
+    }
 }

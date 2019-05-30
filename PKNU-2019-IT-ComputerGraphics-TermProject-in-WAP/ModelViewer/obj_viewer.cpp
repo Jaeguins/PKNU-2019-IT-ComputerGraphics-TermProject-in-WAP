@@ -10,7 +10,7 @@ namespace model_viewer
     void obj_viewer::load(string filename)
     {
         clear();
-        read_object = new obj_reader(filename.c_str());
+        read_object = new obj_reader(view,filename.c_str());
         view->components.push_back(static_cast<gl_object*>(read_object));
     }
     void obj_viewer::clear() const
@@ -22,6 +22,10 @@ namespace model_viewer
             else ++itr;
         }
         delete(read_object);
+    }
+    void obj_viewer::log(string data)
+    {
+        consoleIO->log(data);
     }
     obj_viewer::obj_viewer(int argc, char** argv)
     {
