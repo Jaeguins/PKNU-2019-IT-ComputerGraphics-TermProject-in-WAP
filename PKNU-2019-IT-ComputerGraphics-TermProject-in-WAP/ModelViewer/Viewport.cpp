@@ -10,7 +10,9 @@
 
 namespace model_viewer {
     using namespace std;
-
+    GLfloat lightPos[] = { 0.0, 0.0, 1.5, 1.0 };
+    GLfloat lightPow[] = { 0.8, 0.7, 0.6, 1.0 };
+    int timer = 0;
     void timerCallback(int prior)
     {
         viewport::instance->baseTimerFunc(prior);
@@ -50,10 +52,10 @@ namespace model_viewer {
         switch (key)
         {
         case '=':
-            camera->magnify+=.05f;
+            camera->magnify += .05f;
             break;
         case '-':
-            camera->magnify-=.05f;
+            camera->magnify -= .05f;
             break;
         default:
             parent->consoleIO->input(key);
@@ -75,6 +77,8 @@ namespace model_viewer {
 
         parent->consoleIO->refresh();
 
+        timer =(timer +1)%360;
+        
         if (timerFunc != nullptr)
             timerFunc(prior);
 
@@ -91,6 +95,7 @@ namespace model_viewer {
     }
 
     void viewport::render() {
+
         glLoadIdentity();
         glOrtho(-resolutionX / 160.f, resolutionX / 160.f, -resolutionY / 160.f, resolutionY / 160.f, -100.0, 100.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -108,12 +113,19 @@ namespace model_viewer {
         glVertex3f(0, 0, -10);
         glVertex3f(0, 0, 10);
         glEnd();
+        /*Lights*/
+        glEnable(GL_LIGHTING);
+        glEnable(GL_LIGHT0);
+        glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+        
+        
 
         for (gl_object* t : components)
         {
             t->render();
         }
-
+        glDisable(GL_LIGHT0);
+        glDisable(GL_LIGHTING);
         glutSwapBuffers();
         glutPostRedisplay();
     }
@@ -123,7 +135,7 @@ namespace model_viewer {
         camera = new gl_camera();
     }
 
-    viewport* viewport::GetInstance(obj_viewer* parent, int argc, char **argv)
+    viewport* viewport::GetInstance(obj_viewer* parent, int argc, char** argv)
     {
         if (instance == NULL)
         {
@@ -146,13 +158,13 @@ namespace model_viewer {
     }
 
 
-    viewport::viewport(obj_viewer* parent, int argc, char **argv)
+    viewport::viewport(obj_viewer* parent, int argc, char** argv)
     {
         this->parent = parent;
         millis = 30;
         start();
         glutInit(&argc, argv);
-
+        
         glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
         glutInitWindowSize(resolutionX, resolutionY);
         glutInitWindowPosition(250, 250);
@@ -161,9 +173,17 @@ namespace model_viewer {
         glutMotionFunc(mousePosCallback);
         glutMouseFunc(mouseButtonCallback);
         glutTimerFunc(30, timerCallback, 1);
+        glShadeModel(GL_SMOOTH);
+
+
+
+        glLightfv(GL_LIGHT0, GL_AMBIENT, lightPow);
+        glLightfv(GL_LIGHT0, GL_SPECULAR, lightPow);
+        glLightfv(GL_LIGHT0, GL_DIFFUSE, lightPow);
 
         glutDisplayFunc(renderCallback);
         glDepthFunc(GL_LESS);
         glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
     }
 }
