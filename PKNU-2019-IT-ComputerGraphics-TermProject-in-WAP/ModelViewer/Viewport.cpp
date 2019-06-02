@@ -9,8 +9,7 @@
 
 
 namespace model_viewer {
-    extern "C"
-        using namespace std;
+    using namespace std;
 
     void timerCallback(int prior)
     {
@@ -37,32 +36,47 @@ namespace model_viewer {
 
     void viewport::baseMousePosFunc(int x, int y) {
         {
-            Camera->xAngle += ((x - postX)) / (resolutionX / 2.0) * 90;
-            Camera->yAngle += ((postY - y)) / (resolutionY / 2.0) * 90;
+            camera->xAngle += ((postX - x)) / (resolutionX / 2.0) * 90;
+            camera->yAngle += ((y - postY)) / (resolutionY / 2.0) * 90;
             postX = x;
             postY = y;
         }
-        if(mousePosFunc!=nullptr)
-        mousePosFunc(x, y);
+        if (mousePosFunc != nullptr)
+            mousePosFunc(x, y);
     }
 
+
     void viewport::baseKeyFunc(unsigned char key, int x, int y) {
-        parent->consoleIO->input(key);
-        if(keyFunc!=nullptr)
-        keyFunc(key, x, y);
+        switch (key)
+        {
+        case '=':
+            camera->magnify+=.05f;
+            break;
+        case '-':
+            camera->magnify-=.05f;
+            break;
+        default:
+            parent->consoleIO->input(key);
+            break;
+        }
+
+        if (keyFunc != nullptr)
+            keyFunc(key, x, y);
     }
 
     void viewport::baseMouseButtonFunc(int button, int state, int x, int y) {
-        if(mouseButtonFunc!=nullptr)
-        mouseButtonFunc(button, state, x, y);
+        postX = x;
+        postY = y;
+        if (mouseButtonFunc != nullptr)
+            mouseButtonFunc(button, state, x, y);
     }
 
     void viewport::baseTimerFunc(int prior) {
 
         parent->consoleIO->refresh();
 
-        if(timerFunc!=nullptr)
-        timerFunc(prior);
+        if (timerFunc != nullptr)
+            timerFunc(prior);
 
 
         glutTimerFunc(millis,
@@ -71,11 +85,17 @@ namespace model_viewer {
     }
 
 
+    void viewport::log(string data, float time)
+    {
+        parent->log(data, time);
+    }
+
     void viewport::render() {
         glLoadIdentity();
+        glOrtho(-resolutionX / 160.f, resolutionX / 160.f, -resolutionY / 160.f, resolutionY / 160.f, -100.0, 100.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         parent->consoleIO->render();
-        Camera->cameraMove();
+        camera->cameraMove();
         glBegin(GL_LINES);
         glLineWidth(.3);
         glColor3f(1, 0, 0);
@@ -100,14 +120,14 @@ namespace model_viewer {
 
     void viewport::start() {
         components.reserve(100);
-        Camera = new gl_camera();
+        camera = new gl_camera();
     }
 
-    viewport* viewport::GetInstance(obj_viewer* parent,int argc, char **argv)
+    viewport* viewport::GetInstance(obj_viewer* parent, int argc, char **argv)
     {
         if (instance == NULL)
         {
-            instance = new viewport(parent,argc, argv);
+            instance = new viewport(parent, argc, argv);
         }
         return instance;
     }
@@ -115,10 +135,10 @@ namespace model_viewer {
     void viewport::drawText(float WinPosX, float WinPosY, const char* strMsg, gl_vec_3f color, void* font)
     {
         double FontWidth = 0.02;
-        glColor3f(color.x,color.y,color.z);
+        glColor3f(color.x, color.y, color.z);
 
         int len = (int)strlen(strMsg);
-        glRasterPos2f(WinPosX,WinPosY);
+        glRasterPos2f(WinPosX, WinPosY);
         for (int i = 0; i < len; ++i)
         {
             glutBitmapCharacter(font, strMsg[i]);
@@ -126,23 +146,24 @@ namespace model_viewer {
     }
 
 
-    viewport::viewport(obj_viewer* parent,int argc, char **argv)
+    viewport::viewport(obj_viewer* parent, int argc, char **argv)
     {
-        this->parent=parent;
-        millis=30;
+        this->parent = parent;
+        millis = 30;
         start();
         glutInit(&argc, argv);
+
         glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
         glutInitWindowSize(resolutionX, resolutionY);
-        glutInitWindowPosition(500, 500);
+        glutInitWindowPosition(250, 250);
         glutCreateWindow("example");
         glutKeyboardFunc(keyCallback);
         glutMotionFunc(mousePosCallback);
         glutMouseFunc(mouseButtonCallback);
         glutTimerFunc(30, timerCallback, 1);
+
         glutDisplayFunc(renderCallback);
-        glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
-        glOrtho(-1.0, 1.0, -1.0, 1.0, -10.0, 10.0);
+        glEnable(GL_DEPTH_TEST);
     }
 }

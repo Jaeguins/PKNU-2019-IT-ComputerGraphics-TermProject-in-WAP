@@ -30,6 +30,8 @@ namespace model_viewer
         void process();
         //한글자 입력함수
         void input(unsigned char in);
+        //출력함수
+        void log(string data,float time=-1);
         //콘솔 그리는 함수
         void render();
         console(obj_viewer* parent);

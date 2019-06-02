@@ -1,5 +1,5 @@
 #include <cmath>
-#include "gl_Vectors.hpp"
+#include "gl_vectors.hpp"
 
 namespace advanced_gl {
     gl_vec_3f::gl_vec_3f()
@@ -45,7 +45,11 @@ namespace advanced_gl {
         return gl_vec_3f(x, y, z) / t;
     }
 
-    gl_vec_3f gl_vec_3f::zero = gl_vec_3f(0, 0, 0);
+    float gl_vec_3f::magnitude() const
+    {
+        return sqrt(x*x+y*y+z*z);
+    }
+
 
     gl_vec_2f::gl_vec_2f()
     {
@@ -89,6 +93,19 @@ namespace advanced_gl {
         return gl_vec_2f(x, y) / t;
     }
 
-    gl_vec_2f gl_vec_2f::zero = gl_vec_2f(0, 0);
+    void glVertexVector(gl_vec_3f vec) {
+        glVertex3f(vec.x, vec.y, vec.z);
+    }
 
+    void glVertexVector(gl_vec_2f vec) {
+        glVertex2f(vec.x, vec.y);
+    }
+
+    void glFace(gl_face face) {
+        for (int i = 0; i < 3; i++)
+            glVertexVector(face.vertices[i]);
+    }
+
+    gl_vec_2f zero2f = gl_vec_2f(0, 0);
+    gl_vec_3f zero3f = gl_vec_3f(0, 0, 0);
 }

@@ -11,13 +11,16 @@ namespace advanced_gl
         gl_vec_3f operator-(gl_vec_3f t) const;
         //크기를 1로 평탄화
         gl_vec_3f normalize() const;
+        //크기 반환
+        float magnitude() const;
         gl_vec_3f operator-() const;
         gl_vec_3f operator*(GLfloat t) const;
         gl_vec_3f operator/(GLfloat t) const;
         gl_vec_3f();
         //(0,0,0)
-        static gl_vec_3f zero;
+        
     };
+    
     //2차원 벡터 구조체
     struct gl_vec_2f {
         GLfloat x, y;
@@ -31,8 +34,9 @@ namespace advanced_gl
         gl_vec_2f operator/(GLfloat t) const;
         gl_vec_2f();
         //(0,0)
-        static gl_vec_2f zero;
+        
     };
+    
     //면에 대한 구조체
     struct gl_face
     {
@@ -44,10 +48,15 @@ namespace advanced_gl
         gl_vec_3f normals[3];
 
     };
-
+    
+    void glVertexVector(gl_vec_3f);
+    void glVertexVector(gl_vec_2f);
+    void glFace(gl_face);
     //회전 구조체
     struct Quaternion {
         gl_vec_3f vect = gl_vec_3f(0, 1, 0);
         float angle = 0.0f;
     };
+    extern gl_vec_3f zero3f;
+    extern gl_vec_2f zero2f;
 }
