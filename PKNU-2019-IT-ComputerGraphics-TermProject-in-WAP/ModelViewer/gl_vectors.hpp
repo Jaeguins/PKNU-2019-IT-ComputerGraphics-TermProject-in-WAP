@@ -16,6 +16,7 @@ namespace advanced_gl
         gl_vec_3f operator-() const;
         gl_vec_3f operator*(GLfloat t) const;
         gl_vec_3f operator/(GLfloat t) const;
+        gl_vec_3f operator%(gl_vec_3f t);
         gl_vec_3f();
         //(0,0,0)
         
@@ -32,6 +33,7 @@ namespace advanced_gl
         gl_vec_2f operator-() const;
         gl_vec_2f operator*(GLfloat t) const;
         gl_vec_2f operator/(GLfloat t) const;
+        
         gl_vec_2f();
         //(0,0)
         
