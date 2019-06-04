@@ -120,13 +120,18 @@ namespace advanced_gl {
 
 
     void glFace(gl_face face) {
-        for (int i = 0; i < 3; i++) {
+        if (face.amount == 3)
+            glBegin(GL_TRIANGLES);
+        else
+            glBegin(GL_QUADS);
+        for (int i = 0; i < face.amount; i++) {
             if (face.normals[i].magnitude() == 0)
                 glNormalVector(computePlane(face.vertices[0],face.vertices[1],face.vertices[2]));
             else
                 glNormalVector(face.normals[i]);
             glVertexVector(face.vertices[i]);
         }
+        glEnd();
     }
 
     gl_vec_2f zero2f = gl_vec_2f(0, 0);

@@ -17,6 +17,7 @@ namespace model_viewer
     public:
         float x_max,x_min,y_max,y_min,z_max,z_min;
         obj_reader(viewport* parent, const char* path);
+        ~obj_reader();
         viewport* parent;
         bool load(string path);
         string path;
