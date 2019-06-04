@@ -42,13 +42,13 @@ namespace advanced_gl
     //면에 대한 구조체
     struct gl_face
     {
+        int amount;
         //폴리곤 점
-        gl_vec_3f vertices[3];
+        gl_vec_3f vertices[5];
         //uv 좌표
-        gl_vec_2f uvs[3];
+        gl_vec_2f uvs[5];
         //법선벡터
-        gl_vec_3f normals[3];
-
+        gl_vec_3f normals[5];
     };
     
     void glVertexVector(gl_vec_3f);

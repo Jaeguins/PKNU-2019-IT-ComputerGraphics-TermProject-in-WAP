@@ -7,7 +7,8 @@ namespace advanced_gl {
         glRotatef(Rotation.angle, Rotation.vect.x, Rotation.vect.y, Rotation.vect.z);
         glScalef(Scale.x, Scale.y, Scale.z);
         glColor3f(Color.x, Color.y, Color.z);
-        this->draw(this);
+        if (draw != nullptr)
+            this->draw(this);
         for (std::vector<gl_object*>::size_type i = 0; i < subObjects.size(); i++) {
             subObjects[i]->render();
         }

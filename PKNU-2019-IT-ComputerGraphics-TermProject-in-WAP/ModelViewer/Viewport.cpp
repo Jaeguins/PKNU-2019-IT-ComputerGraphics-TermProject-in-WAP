@@ -70,8 +70,8 @@ namespace model_viewer {
         case '-':
             camera->magnify -= .05f;
             break;
-        case '`':
-            parent->consoleIO->input_buffer->append("obj ../teddybear.obj");
+        case '`'://HACK CHEAT CODE
+            parent->consoleIO->input_buffer->append("obj ../M24/M24.obj");
             break;
         default:
             parent->consoleIO->input(key);
@@ -157,13 +157,15 @@ namespace model_viewer {
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, materialAmbient);
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, materialDiffuse);
 
-
-
+        
         //ViewModel
         for (gl_object* t : components)
         {
             t->render();
         }
+        
+
+        //Light off
         glDisable(GL_LIGHT0);
         glDisable(GL_LIGHTING);
 
