@@ -10,13 +10,21 @@
 
 namespace model_viewer {
     using namespace std;
-    GLfloat lightPos[] = { 8,8,8,1};
     
+    //Light
+    GLfloat lightPos[] = { 8,8,8,1};
     GLfloat diffuse[] = { .8,.8,.8,.8 };
     GLfloat ambient[] = { 1,1,1,.5 };
     GLfloat specular[] = { 1,1,1,.8 };
     GLfloat linear_attenutation = .5f;
     GLfloat quadratic_attenutation = 1.8f;
+
+    //Material
+    GLfloat materialDiffuse[] = { .5,.5,.5 };
+    GLfloat materialAmbient[] = { 1,1,1 };
+    GLfloat materialSpecular[] = { 1,1,1 };
+
+
     int timer = 0;
     void timerCallback(int prior)
     {
@@ -43,8 +51,8 @@ namespace model_viewer {
 
     void viewport::baseMousePosFunc(int x, int y) {
         {
-            camera->xAngle += ((postX - x)) / (resolutionX / 2.0) * 90;
-            camera->yAngle += ((y - postY)) / (resolutionY / 2.0) * 90;
+            camera->xAngle += ((postX - x)) / ((float)resolutionX / 2.0f) * 90;
+            camera->yAngle += ((y - postY)) / ((float)resolutionY / 2.0f) * 90;
             postX = x;
             postY = y;
         }
@@ -112,24 +120,19 @@ namespace model_viewer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         parent->consoleIO->render();
 
-        /*Lights*/
-
-        float attenuLin = linear_attenutation / camera->magnify, attenuQuad = quadratic_attenutation / camera->magnify;
+        
+        
+        //Light
+        float attenuLin = linear_attenutation / camera->magnify,
+            attenuQuad = quadratic_attenutation / camera->magnify;
         glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, attenuLin);
         glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, attenuQuad);
         glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
-        //glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, lightDir);
-
-        //LightSphere
-        glPushMatrix();
-        glTranslatef(lightPos[0], lightPos[1], lightPos[2]);
-        glColor3f(1, 0, 0);
-        glutWireSphere(.1, 10, 10);
-        glPopMatrix();
-
 
 
         camera->cameraMove();
+
+        //Axis
         glBegin(GL_LINES);
         glLineWidth(.3);
         glColor3f(1, 0, 0);
@@ -144,35 +147,25 @@ namespace model_viewer {
         glEnd();
 
 
+        //Light On
         glEnable(GL_LIGHTING);
         glEnable(GL_LIGHT0);
 
-        //Material
 
-        GLfloat materialDiffuse[] = { .5,.5,.5 };
-        GLfloat materialAmbient[] = { 1,1,1 };
-        GLfloat materialSpecular[] = { 1,1,1 };
+
+        //Material
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, materialAmbient);
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, materialDiffuse);
 
 
-        //Test
-        //glColor3f(.5, .5, .5);
-        glPushMatrix();
-        glTranslatef(0, -2, 0);
-        glutSolidSphere(1, 30, 30);
-        glPopMatrix();
 
+        //ViewModel
         for (gl_object* t : components)
         {
             t->render();
         }
         glDisable(GL_LIGHT0);
         glDisable(GL_LIGHTING);
-
-
-
-
 
 
         glutSwapBuffers();
@@ -229,9 +222,7 @@ namespace model_viewer {
 
         glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
         glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
-        //glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
         glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 180);
-        //glLightf(GL_LIGHT0, GL_SHININESS, 0);
 
         glutDisplayFunc(renderCallback);
         glDepthFunc(GL_LESS);

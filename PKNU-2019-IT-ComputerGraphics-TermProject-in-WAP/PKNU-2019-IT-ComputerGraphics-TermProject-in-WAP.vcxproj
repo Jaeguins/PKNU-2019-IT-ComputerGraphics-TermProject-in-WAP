@@ -133,6 +133,7 @@
     <ClCompile Include="ModelViewer\obj_reader.cpp" />
     <ClCompile Include="ModelViewer\obj_viewer.cpp" />
     <ClCompile Include="ModelViewer\string_split.cpp" />
+    <ClCompile Include="ModelViewer\stb_image.hpp" />
     <ClCompile Include="ModelViewer\viewport.cpp" />
   </ItemGroup>
   <ItemGroup>
