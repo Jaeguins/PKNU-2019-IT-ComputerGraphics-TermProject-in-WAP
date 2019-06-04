@@ -29,6 +29,13 @@ namespace advanced_gl {
         return gl_vec_3f(x, y, z)*(1 / t);
     }
 
+    gl_vec_3f gl_vec_3f::operator%(gl_vec_3f rhs)
+    {
+        return gl_vec_3f(y*rhs.z - z * rhs.y,
+            z*rhs.x - x * rhs.z,
+            x*rhs.y - y * rhs.x);
+    }
+
     gl_vec_3f gl_vec_3f::operator-() const
     {
         return gl_vec_3f(x, y, z)*-1;
@@ -47,7 +54,7 @@ namespace advanced_gl {
 
     float gl_vec_3f::magnitude() const
     {
-        return sqrt(x*x+y*y+z*z);
+        return sqrt(x*x + y * y + z * z);
     }
 
 
@@ -77,6 +84,8 @@ namespace advanced_gl {
         return gl_vec_2f(x, y)*(1 / t);
     }
 
+
+
     gl_vec_2f gl_vec_2f::operator-() const
     {
         return gl_vec_2f(x, y)*-1;
@@ -100,12 +109,27 @@ namespace advanced_gl {
     void glVertexVector(gl_vec_2f vec) {
         glVertex2f(vec.x, vec.y);
     }
+    void glNormalVector(gl_vec_3f vec) {
+        glNormal3f(vec.x, vec.y, vec.z);
+    }
+
+    gl_vec_3f computePlane(gl_vec_3f A, gl_vec_3f B, gl_vec_3f C)
+    {
+        return ((A - B) % (B - C)).normalize(); //perform cross product of two lines on plane
+    }
+
 
     void glFace(gl_face face) {
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++) {
+            if (face.normals[i].magnitude() == 0)
+                glNormalVector(computePlane(face.vertices[0],face.vertices[1],face.vertices[2]));
+            else
+                glNormalVector(face.normals[i]);
             glVertexVector(face.vertices[i]);
+        }
     }
 
     gl_vec_2f zero2f = gl_vec_2f(0, 0);
     gl_vec_3f zero3f = gl_vec_3f(0, 0, 0);
+    
 }

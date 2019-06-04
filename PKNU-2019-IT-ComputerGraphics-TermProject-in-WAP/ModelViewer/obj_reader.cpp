@@ -15,7 +15,7 @@ namespace model_viewer
         draw = [](gl_object* obj)->void {
             obj_reader* read = (obj_reader*)obj;
 
-            
+
             glBegin(GL_TRIANGLES);
             for (gl_face face : read->faces) {
                 glFace(face);
@@ -50,14 +50,14 @@ namespace model_viewer
             if (word[0] == "v") {
                 gl_vec_3f vertex;
                 vertex.x = stoi(word[1]);
-                if(x_max<vertex.x)x_max=vertex.x;
-                if(x_min>vertex.x)x_min=vertex.x;
+                if (x_max < vertex.x)x_max = vertex.x;
+                if (x_min > vertex.x)x_min = vertex.x;
                 vertex.y = stoi(word[2]);
-                if(y_max<vertex.y)y_max=vertex.y;
-                if(y_min>vertex.y)y_min=vertex.y;
+                if (y_max < vertex.y)y_max = vertex.y;
+                if (y_min > vertex.y)y_min = vertex.y;
                 vertex.z = stoi(word[3]);
-                if(z_max<vertex.z)z_max=vertex.z;
-                if(z_min>vertex.z)z_min=vertex.z;
+                if (z_max < vertex.z)z_max = vertex.z;
+                if (z_min > vertex.z)z_min = vertex.z;
                 temp_vertices.push_back(vertex);
             }
             else if (word[0] == "vt") {
@@ -81,9 +81,12 @@ namespace model_viewer
                 vector<string> t_vertex;
                 for (int i = 0; i < 3; i++) {
                     t_vertex = split(word[i + 1], '/');
-                    face.vertices[i] = gl_vec_3f(temp_vertices[stoi(t_vertex[0]) - 1]);
-                    face.uvs[i] = gl_vec_2f(temp_uvs[stoi(t_vertex[1]) - 1]);
-                    face.normals[i] = gl_vec_3f(temp_normals[stoi(t_vertex[2]) - 1]);
+                    if (t_vertex.size() >= 1)
+                        face.vertices[i] = gl_vec_3f(temp_vertices[stoi(t_vertex[0]) - 1]);
+                    if (t_vertex.size() >= 2)
+                        face.uvs[i] = gl_vec_2f(temp_uvs[stoi(t_vertex[1]) - 1]);
+                    if (t_vertex.size() >= 3)
+                        face.normals[i] = gl_vec_3f(temp_normals[stoi(t_vertex[2]) - 1]);
                 }
                 temp_faces.push_back(face);
             }
@@ -92,8 +95,10 @@ namespace model_viewer
         uvs = temp_uvs;
         normals = temp_normals;
         faces = temp_faces;
-        parent->camera->Position=-gl_vec_3f((x_max+x_min)/2*Scale.x,(y_max+y_min)/2*Scale.y,(z_max+z_min)/2*Scale.z);
+        parent->camera->Position = -gl_vec_3f((x_max + x_min) / 2 * Scale.x, (y_max + y_min) / 2 * Scale.y, (z_max + z_min) / 2 * Scale.z);
         parent->log("Load done.");
         return true;
     }
+
+    
 }

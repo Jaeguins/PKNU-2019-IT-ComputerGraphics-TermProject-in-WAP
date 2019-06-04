@@ -3,7 +3,7 @@
 #define GLOBJECTH
 #include<vector>
 #include "gl_vectors.hpp"
-
+#include<string>
 
 namespace advanced_gl {
     //오브젝트 하나에 대한 클래스

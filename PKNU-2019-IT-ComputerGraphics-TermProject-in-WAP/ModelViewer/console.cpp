@@ -30,7 +30,6 @@ namespace model_viewer
         case 1:
             if (!args[0].compare("identify")) {
                 gl_camera* cam = parent->view->camera;
-                cam->Position = zero3f;
                 cam->xAngle = 0;
                 cam->yAngle = 0;
                 log("Rotation set to default.");

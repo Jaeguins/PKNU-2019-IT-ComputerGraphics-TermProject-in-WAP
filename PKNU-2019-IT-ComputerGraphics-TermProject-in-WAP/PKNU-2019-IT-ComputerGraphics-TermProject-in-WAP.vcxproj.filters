@@ -51,6 +51,9 @@
     <ClCompile Include="ModelViewer\string_split.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="ModelViewer\stb_image.hpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModelViewer\viewport.hpp">
