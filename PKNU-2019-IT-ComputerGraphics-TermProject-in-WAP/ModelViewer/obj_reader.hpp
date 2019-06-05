@@ -19,7 +19,9 @@ namespace model_viewer
         obj_reader(viewport* parent, const char* path);
         ~obj_reader();
         viewport* parent;
+        void auto_magnify();
         bool load(string path);
+        void auto_position();
         string path;
         std::vector<gl_vec_3f>vertices;
         std::vector<gl_vec_2f>uvs;
