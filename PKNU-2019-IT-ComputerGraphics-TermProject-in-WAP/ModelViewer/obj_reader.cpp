@@ -3,6 +3,7 @@
 #include "string_split.h"
 #include "viewport.hpp"
 #include "gl_Camera.hpp"
+#include <algorithm>
 
 
 namespace model_viewer
@@ -32,6 +33,15 @@ namespace model_viewer
             itr = parent->components.erase(itr);
         }
         else itr++;
+    }
+
+    void obj_reader::auto_magnify()
+    {
+        float sizeX = x_max - x_min, sizeY = y_max - y_min,sizeZ=z_max-z_min;
+        float max_size = max(max(sizeX, sizeY), sizeZ);
+        max_size = floor( 1280/max_size)/20;
+        printf("%.2f\n", max_size);
+        parent->camera->magnify = max_size;
     }
 
     bool obj_reader::load(string path)
@@ -106,9 +116,14 @@ namespace model_viewer
         uvs = temp_uvs;
         normals = temp_normals;
         faces = temp_faces;
-        parent->camera->Position = -gl_vec_3f((x_max + x_min) / 2 * Scale.x, (y_max + y_min) / 2 * Scale.y, (z_max + z_min) / 2 * Scale.z);
+        auto_position();
+        auto_magnify();
         parent->log("Load done.");
         return true;
+    }
+    void obj_reader::auto_position()
+    {
+        parent->camera->Position = -gl_vec_3f((x_max + x_min) / 2 * Scale.x, (y_max + y_min) / 2 * Scale.y, (z_max + z_min) / 2 * Scale.z);
     }
 
 

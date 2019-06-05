@@ -62,6 +62,7 @@ namespace model_viewer {
 
 
     void viewport::baseKeyFunc(unsigned char key, int x, int y) {
+        printf("%c", key);
         switch (key)
         {
         case '=':
@@ -73,6 +74,8 @@ namespace model_viewer {
         case '`'://HACK CHEAT CODE
             parent->consoleIO->input_buffer->append("obj ../M24/M24.obj");
             break;
+        case '':
+            exit(0);
         default:
             parent->consoleIO->input(key);
             break;
