@@ -351,3 +351,4 @@ MigrationBackup/
 
 #예제파일 제외
 ![Ee]xample.*
+!M24.*
