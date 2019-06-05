@@ -5,6 +5,7 @@
 #include "obj_viewer.hpp"
 #include "string_split.h"
 #include "gl_camera.hpp"
+#include "obj_reader.hpp"
 
 namespace model_viewer
 {
@@ -33,16 +34,21 @@ namespace model_viewer
                 cam->xAngle = 0;
                 cam->yAngle = 0;
                 log("Rotation set to default.");
+            }else if(!args[0].compare("autosize"))
+            {
+                parent->read_object->auto_magnify();
             }
             else if (!args[0].compare("help")) {
                 float helpShowTime = 10000;
                 log("", helpShowTime);
-                log("+ or - : zoom in/out",helpShowTime);
+                log("Ctrl + C : Exit program.",helpShowTime);
+                log("+ or - : Zoom in/out",helpShowTime);
+                log("autosize : Reset zoom to auto-generated magnification",helpShowTime);
                 log("identify [] : Reset rotation", helpShowTime);
-                log("obj [file path] : open .obj file", helpShowTime);
+                log("obj [file path] : Open .obj file", helpShowTime);
                 log("help [] : Show this message", helpShowTime);
                 log("", helpShowTime);
-                log("commands :", helpShowTime);
+                log("Commands :", helpShowTime);
             }
             break;
         case 2:
