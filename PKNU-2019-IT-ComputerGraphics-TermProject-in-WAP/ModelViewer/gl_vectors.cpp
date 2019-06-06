@@ -129,6 +129,7 @@ namespace advanced_gl {
                 glNormalVector(computePlane(face.vertices[0],face.vertices[1],face.vertices[2]));
             else
                 glNormalVector(face.normals[i]);
+            glTexCoord2f(face.uvs[i].x, face.uvs[i].y);
             glVertexVector(face.vertices[i]);
         }
         glEnd();

@@ -1,4 +1,6 @@
+#define STB_IMAGE_IMPLEMENTATION
 #include <GL/glut.h>
+#include "stb_image.hpp"
 #include "gl_object.hpp"
 #include "viewport.hpp"
 #include <vector>
@@ -8,11 +10,17 @@
 #include "obj_viewer.hpp"
 
 
+
 namespace model_viewer {
     using namespace std;
-    
+
+    //TextureTest
+    unsigned char* data;
+    GLuint texture_id;
+    int sizeX, sizeY, channels;
+
     //Light
-    GLfloat lightPos[] = { 8,8,8,1};
+    GLfloat lightPos[] = { 8,8,8,1 };
     GLfloat diffuse[] = { .8,.8,.8,.8 };
     GLfloat ambient[] = { 1,1,1,.5 };
     GLfloat specular[] = { 1,1,1,.8 };
@@ -123,8 +131,7 @@ namespace model_viewer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         parent->consoleIO->render();
 
-        
-        
+
         //Light
         float attenuLin = linear_attenutation / camera->magnify,
             attenuQuad = quadratic_attenutation / camera->magnify;
@@ -141,14 +148,13 @@ namespace model_viewer {
         glColor3f(1, 0, 0);
         glVertex3f(-10, 0, 0);
         glVertex3f(10, 0, 0);
-        glColor3f(0, 10, 0);
+        glColor3f(0, 1, 0);
         glVertex3f(0, -10, 0);
         glVertex3f(0, 10, 0);
-        glColor3f(0, 0, 10);
+        glColor3f(0, 0, 1);
         glVertex3f(0, 0, -10);
         glVertex3f(0, 0, 10);
         glEnd();
-
 
         //Light On
         glEnable(GL_LIGHTING);
@@ -160,26 +166,88 @@ namespace model_viewer {
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, materialAmbient);
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, materialDiffuse);
 
+
         
+
+
+        glEnable(GL_TEXTURE_2D);
+
+        
+        //TextureTest
+        glColor3f(1, 1, 1);
+        //glBindTexture(GL_TEXTURE_2D, texture_id);
+        /*glBegin(GL_QUADS);
+        glNormal3f(0, 0, 1);
+
+        //glColor3f(1, 0, 0);
+        glTexCoord2f(0.0f, 1.0f);
+        glVertex3f(-5, 5, 0);
+
+        //glColor3f(1, 1, 0);
+        glTexCoord2f(0.0f, 0.0f);
+        glVertex3f(-5, -5, 0);
+
+        //glColor3f(0, 1, 0);
+        glTexCoord2f(1.0f, 0.0f);
+        glVertex3f(5, -5, 0);
+
+
+        //glColor3f(0, 0, 1);
+        glTexCoord2f(1.0f, 1.0f);
+        glVertex3f(5, 5, 0);
+
+
+        glEnd();
         //ViewModel
+        */
         for (gl_object* t : components)
         {
             t->render();
         }
-        
+
+        glDisable(GL_TEXTURE_2D);
 
         //Light off
         glDisable(GL_LIGHT0);
         glDisable(GL_LIGHTING);
 
 
+
         glutSwapBuffers();
         glutPostRedisplay();
+    }
+    void GenerateTexture(string path) {
+        //Texture Generation
+
+        glGenTextures(1, &texture_id);
+        glBindTexture(GL_TEXTURE_2D, texture_id);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+
+        data = stbi_load(path.c_str(), &sizeX, &sizeY, &channels, 0);
+
+        if (data)
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, sizeX, sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        else
+            printf("file not found");
+
+
+
+        glBindTexture(GL_TEXTURE_2D, 0);
+        stbi_image_free(data);
     }
 
     void viewport::start() {
         components.reserve(100);
         camera = new gl_camera();
+        
+        GenerateTexture("../M24/textures/M24R_C.jpg");
+
+
     }
 
     viewport* viewport::GetInstance(obj_viewer* parent, int argc, char** argv)
@@ -207,12 +275,13 @@ namespace model_viewer {
 
     viewport::viewport(obj_viewer* parent, int argc, char** argv)
     {
+        glutInit(&argc, argv);
         this->parent = parent;
         millis = 30;
-        start();
-        glutInit(&argc, argv);
+        
+        
 
-        glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+        glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
         glutInitWindowSize(resolutionX, resolutionY);
         glutInitWindowPosition(250, 250);
         glutCreateWindow("example");
@@ -223,7 +292,7 @@ namespace model_viewer {
         glShadeModel(GL_SMOOTH);
         glFrontFace(GL_CCW);
 
-
+        
 
         glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
         glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
@@ -233,5 +302,10 @@ namespace model_viewer {
         glDepthFunc(GL_LESS);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
+
+        
+        start();
+        
+
     }
 }
