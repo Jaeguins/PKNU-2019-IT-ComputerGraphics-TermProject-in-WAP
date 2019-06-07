@@ -175,7 +175,7 @@ namespace model_viewer {
         
         //TextureTest
         glColor3f(1, 1, 1);
-        //glBindTexture(GL_TEXTURE_2D, texture_id);
+        glBindTexture(GL_TEXTURE_2D, texture_id);
         /*glBegin(GL_QUADS);
         glNormal3f(0, 0, 1);
 
