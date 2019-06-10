@@ -46,6 +46,7 @@ namespace model_viewer
                 log("autosize : Reset zoom to auto-generated magnification",helpShowTime);
                 log("identify [] : Reset rotation", helpShowTime);
                 log("obj [file path] : Open .obj file", helpShowTime);
+                log("tex [file path] : open and apply texture", helpShowTime);
                 log("help [] : Show this message", helpShowTime);
                 log("", helpShowTime);
                 log("Commands :", helpShowTime);
@@ -54,6 +55,8 @@ namespace model_viewer
         case 2:
             if (!args[0].compare("obj")) {
                 parent->load(args[1]);
+            }else if(!args[0].compare("tex")) {
+                parent->try_load_tex(args[1]);
             }
             break;
         case 3:
