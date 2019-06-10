@@ -1,4 +1,4 @@
-#define STB_IMAGE_IMPLEMENTATION
+
 #include <GL/glut.h>
 #include "stb_image.hpp"
 #include "gl_object.hpp"
@@ -14,10 +14,8 @@
 namespace model_viewer {
     using namespace std;
 
-    //TextureTest
-    unsigned char* data;
-    GLuint texture_id;
-    int sizeX, sizeY, channels;
+    
+    
 
     //Light
     GLfloat lightPos[] = { 8,8,8,1 };
@@ -70,7 +68,6 @@ namespace model_viewer {
 
 
     void viewport::baseKeyFunc(unsigned char key, int x, int y) {
-        printf("%c", key);
         switch (key)
         {
         case '=':
@@ -79,8 +76,11 @@ namespace model_viewer {
         case '-':
             camera->magnify -= .05f;
             break;
-        case '`'://HACK CHEAT CODE
+        case '`'://HACK CHEAT MODEL CODE
             parent->consoleIO->input_buffer->append("obj ../M24/M24.obj");
+            break;
+        case '~'://HACk CHEAT TEXTURE CODE
+            parent->consoleIO->input_buffer->append("tex ../M24/textures/M24R_C.jpg");
             break;
         case '':
             exit(0);
@@ -171,35 +171,9 @@ namespace model_viewer {
 
 
         glEnable(GL_TEXTURE_2D);
-
+        glBindTexture(GL_TEXTURE_2D, 0);
         
-        //TextureTest
         glColor3f(1, 1, 1);
-        glBindTexture(GL_TEXTURE_2D, texture_id);
-        /*glBegin(GL_QUADS);
-        glNormal3f(0, 0, 1);
-
-        //glColor3f(1, 0, 0);
-        glTexCoord2f(0.0f, 1.0f);
-        glVertex3f(-5, 5, 0);
-
-        //glColor3f(1, 1, 0);
-        glTexCoord2f(0.0f, 0.0f);
-        glVertex3f(-5, -5, 0);
-
-        //glColor3f(0, 1, 0);
-        glTexCoord2f(1.0f, 0.0f);
-        glVertex3f(5, -5, 0);
-
-
-        //glColor3f(0, 0, 1);
-        glTexCoord2f(1.0f, 1.0f);
-        glVertex3f(5, 5, 0);
-
-
-        glEnd();
-        //ViewModel
-        */
         for (gl_object* t : components)
         {
             t->render();
@@ -216,36 +190,13 @@ namespace model_viewer {
         glutSwapBuffers();
         glutPostRedisplay();
     }
-    void GenerateTexture(string path) {
-        //Texture Generation
-
-        glGenTextures(1, &texture_id);
-        glBindTexture(GL_TEXTURE_2D, texture_id);
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-
-        data = stbi_load(path.c_str(), &sizeX, &sizeY, &channels, 0);
-
-        if (data)
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, sizeX, sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        else
-            printf("file not found");
-
-
-
-        glBindTexture(GL_TEXTURE_2D, 0);
-        stbi_image_free(data);
-    }
+    
 
     void viewport::start() {
         components.reserve(100);
         camera = new gl_camera();
         
-        GenerateTexture("../M24/textures/M24R_C.jpg");
+        
 
 
     }

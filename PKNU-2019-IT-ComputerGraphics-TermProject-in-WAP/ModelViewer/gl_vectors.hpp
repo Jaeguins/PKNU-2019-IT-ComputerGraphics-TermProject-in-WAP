@@ -53,7 +53,7 @@ namespace advanced_gl
     
     void glVertexVector(gl_vec_3f);
     void glVertexVector(gl_vec_2f);
-    void glFace(gl_face);
+    void glFace(gl_face,GLuint);
     //회전 구조체
     struct Quaternion {
         gl_vec_3f vect = gl_vec_3f(0, 1, 0);

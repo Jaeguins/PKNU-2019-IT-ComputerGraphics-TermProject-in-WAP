@@ -118,17 +118,19 @@ namespace advanced_gl {
     }
 
 
-    void glFace(gl_face face) {
+    void glFace(gl_face face, GLuint tex_index) {
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_LIGHTING);
         glColor3f(1, 1, 1);
+        if (tex_index != 0xffffffff)
+            glBindTexture(GL_TEXTURE_2D, tex_index);
         glBegin(face.amount == 3 ? GL_TRIANGLES : GL_QUADS);
         for (int i = 0; i < face.amount; i++) {
             if (face.normals[i].magnitude() == 0)
                 glNormalVector(computePlane(face.vertices[0], face.vertices[1], face.vertices[2]));
             else
                 glNormalVector(face.normals[i]);
-            glTexCoord2f(face.uvs[i].x, 1-face.uvs[i].y);
+            glTexCoord2f(face.uvs[i].x, 1 - face.uvs[i].y);
             glVertexVector(face.vertices[i]);
         }
         glEnd();
