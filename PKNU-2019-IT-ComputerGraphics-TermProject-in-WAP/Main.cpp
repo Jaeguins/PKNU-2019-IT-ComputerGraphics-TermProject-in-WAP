@@ -1,3 +1,4 @@
+#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 #include<iostream>
 #include<GL/glut.h>
 #include "ModelViewer/obj_viewer.hpp"

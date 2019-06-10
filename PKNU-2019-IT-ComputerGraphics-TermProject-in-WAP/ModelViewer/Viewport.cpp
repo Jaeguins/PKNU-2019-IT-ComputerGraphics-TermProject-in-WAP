@@ -76,12 +76,14 @@ namespace model_viewer {
         case '-':
             camera->magnify -= .2f;
             break;
+#ifdef DEBUG
         case '`'://HACK CHEAT MODEL CODE
-            parent->consoleIO->input_buffer->append("obj ../M24/M24.obj");
+            parent->consoleIO->input_buffer->append("obj ../example/M24.obj");
             break;
         case '~'://HACk CHEAT TEXTURE CODE
-            parent->consoleIO->input_buffer->append("tex ../M24/textures/M24R_C.jpg");
+            parent->consoleIO->input_buffer->append("tex ../example/textures/M24R_C.jpg");
             break;
+#endif
         case '':
             exit(0);
         default:

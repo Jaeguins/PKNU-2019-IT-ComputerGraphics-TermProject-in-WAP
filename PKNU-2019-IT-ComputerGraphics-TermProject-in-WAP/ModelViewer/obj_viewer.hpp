@@ -1,6 +1,6 @@
 #pragma once
+//#define DEBUG
 #include <string>
-#include <vector>
 
 namespace advanced_gl {
     class gl_object;
