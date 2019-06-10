@@ -1,4 +1,6 @@
+
 #include <GL/glut.h>
+#include "stb_image.hpp"
 #include "gl_object.hpp"
 #include "viewport.hpp"
 #include <vector>
@@ -8,11 +10,15 @@
 #include "obj_viewer.hpp"
 
 
+
 namespace model_viewer {
     using namespace std;
+
     
+    
+
     //Light
-    GLfloat lightPos[] = { 8,8,8,1};
+    GLfloat lightPos[] = { 8,8,8,1 };
     GLfloat diffuse[] = { .8,.8,.8,.8 };
     GLfloat ambient[] = { 1,1,1,.5 };
     GLfloat specular[] = { 1,1,1,.8 };
@@ -62,17 +68,19 @@ namespace model_viewer {
 
 
     void viewport::baseKeyFunc(unsigned char key, int x, int y) {
-        printf("%c", key);
         switch (key)
         {
         case '=':
-            camera->magnify += .05f;
+            camera->magnify += .2f;
             break;
         case '-':
-            camera->magnify -= .05f;
+            camera->magnify -= .2f;
             break;
-        case '`'://HACK CHEAT CODE
+        case '`'://HACK CHEAT MODEL CODE
             parent->consoleIO->input_buffer->append("obj ../M24/M24.obj");
+            break;
+        case '~'://HACk CHEAT TEXTURE CODE
+            parent->consoleIO->input_buffer->append("tex ../M24/textures/M24R_C.jpg");
             break;
         case '':
             exit(0);
@@ -123,8 +131,7 @@ namespace model_viewer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         parent->consoleIO->render();
 
-        
-        
+
         //Light
         float attenuLin = linear_attenutation / camera->magnify,
             attenuQuad = quadratic_attenutation / camera->magnify;
@@ -141,14 +148,13 @@ namespace model_viewer {
         glColor3f(1, 0, 0);
         glVertex3f(-10, 0, 0);
         glVertex3f(10, 0, 0);
-        glColor3f(0, 10, 0);
+        glColor3f(0, 1, 0);
         glVertex3f(0, -10, 0);
         glVertex3f(0, 10, 0);
-        glColor3f(0, 0, 10);
+        glColor3f(0, 0, 1);
         glVertex3f(0, 0, -10);
         glVertex3f(0, 0, 10);
         glEnd();
-
 
         //Light On
         glEnable(GL_LIGHTING);
@@ -160,26 +166,39 @@ namespace model_viewer {
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, materialAmbient);
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, materialDiffuse);
 
+
         
-        //ViewModel
+
+
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        
+        glColor3f(1, 1, 1);
         for (gl_object* t : components)
         {
             t->render();
         }
-        
+
+        glDisable(GL_TEXTURE_2D);
 
         //Light off
         glDisable(GL_LIGHT0);
         glDisable(GL_LIGHTING);
 
 
+
         glutSwapBuffers();
         glutPostRedisplay();
     }
+    
 
     void viewport::start() {
         components.reserve(100);
         camera = new gl_camera();
+        
+        
+
+
     }
 
     viewport* viewport::GetInstance(obj_viewer* parent, int argc, char** argv)
@@ -207,12 +226,13 @@ namespace model_viewer {
 
     viewport::viewport(obj_viewer* parent, int argc, char** argv)
     {
+        glutInit(&argc, argv);
         this->parent = parent;
         millis = 30;
-        start();
-        glutInit(&argc, argv);
+        
+        
 
-        glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+        glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
         glutInitWindowSize(resolutionX, resolutionY);
         glutInitWindowPosition(250, 250);
         glutCreateWindow("example");
@@ -223,7 +243,7 @@ namespace model_viewer {
         glShadeModel(GL_SMOOTH);
         glFrontFace(GL_CCW);
 
-
+        
 
         glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
         glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
@@ -233,5 +253,10 @@ namespace model_viewer {
         glDepthFunc(GL_LESS);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
+
+        
+        start();
+        
+
     }
 }

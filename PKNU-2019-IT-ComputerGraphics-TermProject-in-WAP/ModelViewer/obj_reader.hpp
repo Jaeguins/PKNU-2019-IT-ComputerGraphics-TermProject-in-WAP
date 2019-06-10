@@ -21,8 +21,10 @@ namespace model_viewer
         viewport* parent;
         void auto_magnify();
         bool load(string path);
+        bool load_main_tex(string path);
         void auto_position();
         string path;
+        GLuint main_tex=0xffffffff;
         std::vector<gl_vec_3f>vertices;
         std::vector<gl_vec_2f>uvs;
         std::vector<gl_vec_3f>normals;

@@ -1,15 +1,17 @@
+#define STB_IMAGE_IMPLEMENTATION
 #include "obj_reader.hpp"
 #include <fstream>
 #include "string_split.h"
 #include "viewport.hpp"
-#include "gl_Camera.hpp"
+#include "gl_camera.hpp"
 #include <algorithm>
+#include "stb_image.hpp"
 
 
 namespace model_viewer
 {
     using namespace std;
-    obj_reader::obj_reader(viewport* parent, const char* path) :gl_object::gl_object()
+    obj_reader::obj_reader(viewport* parent, const char* path) :gl_object()
     {
         this->Scale = Scale / 10.f;
         this->parent = parent;
@@ -19,7 +21,7 @@ namespace model_viewer
 
 
             for (gl_face face : read->faces) {
-                glFace(face);
+                glFace(face, read->main_tex);
             }
         };
 
@@ -37,9 +39,9 @@ namespace model_viewer
 
     void obj_reader::auto_magnify()
     {
-        float sizeX = x_max - x_min, sizeY = y_max - y_min,sizeZ=z_max-z_min;
+        float sizeX = x_max - x_min, sizeY = y_max - y_min, sizeZ = z_max - z_min;
         float max_size = max(max(sizeX, sizeY), sizeZ);
-        max_size = floor( 1280/max_size)/20;
+        max_size = floor(1280 / max_size) / 20;
         printf("%.2f\n", max_size);
         parent->camera->magnify = max_size;
     }
@@ -118,9 +120,51 @@ namespace model_viewer
         faces = temp_faces;
         auto_position();
         auto_magnify();
-        parent->log("Load done.");
+        parent->log("Model Successfully load.");
         return true;
     }
+    //Texture Generation
+    bool obj_reader::load_main_tex(string path) {
+
+        unsigned char* data;
+        int sizeX, sizeY, channels;
+        glGenTextures(1, &main_tex);
+        glBindTexture(GL_TEXTURE_2D, main_tex);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+
+        data = stbi_load(path.c_str(), &sizeX, &sizeY, &channels, 0);
+        GLenum format;
+        switch(channels) {
+        case 1:
+            format = GL_RED;
+            break;
+        case 2:
+            format = GL_RGBA;
+            break;
+        case 3:
+            format = GL_RGB;
+            break;
+        default:
+            format = GL_RGBA;
+        }
+        if (data) {
+            glTexImage2D(GL_TEXTURE_2D, 0, format, sizeX, sizeY, 0, format, GL_UNSIGNED_BYTE, data);
+            parent->log("Texture Succesfully load.");
+        }else
+            parent->log("file not found");
+
+
+
+        glBindTexture(GL_TEXTURE_2D, 0);
+        stbi_image_free(data);
+        return data?true:false;
+    }
+
     void obj_reader::auto_position()
     {
         parent->camera->Position = -gl_vec_3f((x_max + x_min) / 2 * Scale.x, (y_max + y_min) / 2 * Scale.y, (z_max + z_min) / 2 * Scale.z);

@@ -1,6 +1,5 @@
 #include <cmath>
 #include "gl_vectors.hpp"
-
 namespace advanced_gl {
     gl_vec_3f::gl_vec_3f()
     {
@@ -21,29 +20,29 @@ namespace advanced_gl {
 
     gl_vec_3f gl_vec_3f::operator*(GLfloat t) const
     {
-        return gl_vec_3f(x*t, y*t, z*t);
+        return gl_vec_3f(x * t, y * t, z * t);
     }
 
     gl_vec_3f gl_vec_3f::operator/(GLfloat t) const
     {
-        return gl_vec_3f(x, y, z)*(1 / t);
+        return gl_vec_3f(x, y, z) * (1 / t);
     }
 
     gl_vec_3f gl_vec_3f::operator%(gl_vec_3f rhs)
     {
-        return gl_vec_3f(y*rhs.z - z * rhs.y,
-            z*rhs.x - x * rhs.z,
-            x*rhs.y - y * rhs.x);
+        return gl_vec_3f(y * rhs.z - z * rhs.y,
+            z * rhs.x - x * rhs.z,
+            x * rhs.y - y * rhs.x);
     }
 
     gl_vec_3f gl_vec_3f::operator-() const
     {
-        return gl_vec_3f(x, y, z)*-1;
+        return gl_vec_3f(x, y, z) * -1;
     }
 
     gl_vec_3f gl_vec_3f::operator-(gl_vec_3f a) const
     {
-        return gl_vec_3f(x, y, z) + (a*-1);
+        return gl_vec_3f(x, y, z) + (a * -1);
     }
 
     gl_vec_3f gl_vec_3f::normalize() const
@@ -54,7 +53,7 @@ namespace advanced_gl {
 
     float gl_vec_3f::magnitude() const
     {
-        return sqrt(x*x + y * y + z * z);
+        return sqrt(x * x + y * y + z * z);
     }
 
 
@@ -76,19 +75,19 @@ namespace advanced_gl {
 
     gl_vec_2f gl_vec_2f::operator*(GLfloat t) const
     {
-        return gl_vec_2f(x*t, y*t);
+        return gl_vec_2f(x * t, y * t);
     }
 
     gl_vec_2f gl_vec_2f::operator/(GLfloat t) const
     {
-        return gl_vec_2f(x, y)*(1 / t);
+        return gl_vec_2f(x, y) * (1 / t);
     }
 
 
 
     gl_vec_2f gl_vec_2f::operator-() const
     {
-        return gl_vec_2f(x, y)*-1;
+        return gl_vec_2f(x, y) * -1;
     }
 
     gl_vec_2f gl_vec_2f::operator-(gl_vec_2f a) const
@@ -119,22 +118,27 @@ namespace advanced_gl {
     }
 
 
-    void glFace(gl_face face) {
-        if (face.amount == 3)
-            glBegin(GL_TRIANGLES);
-        else
-            glBegin(GL_QUADS);
+    void glFace(gl_face face, GLuint tex_index) {
+        glEnable(GL_TEXTURE_2D);
+        glEnable(GL_LIGHTING);
+        glColor3f(1, 1, 1);
+        if (tex_index != 0xffffffff)
+            glBindTexture(GL_TEXTURE_2D, tex_index);
+        glBegin(face.amount == 3 ? GL_TRIANGLES : GL_QUADS);
         for (int i = 0; i < face.amount; i++) {
             if (face.normals[i].magnitude() == 0)
-                glNormalVector(computePlane(face.vertices[0],face.vertices[1],face.vertices[2]));
+                glNormalVector(computePlane(face.vertices[0], face.vertices[1], face.vertices[2]));
             else
                 glNormalVector(face.normals[i]);
+            glTexCoord2f(face.uvs[i].x, 1 - face.uvs[i].y);
             glVertexVector(face.vertices[i]);
         }
         glEnd();
+        glDisable(GL_TEXTURE_2D);
+        glDisable(GL_LIGHTING);
     }
 
     gl_vec_2f zero2f = gl_vec_2f(0, 0);
     gl_vec_3f zero3f = gl_vec_3f(0, 0, 0);
-    
+
 }

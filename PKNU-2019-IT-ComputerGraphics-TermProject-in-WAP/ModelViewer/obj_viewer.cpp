@@ -27,6 +27,14 @@ namespace model_viewer
     {
         consoleIO->log(data,time);
     }
+
+    void obj_viewer::try_load_tex(string path) {
+        if (read_object != nullptr)
+            read_object->load_main_tex(path);
+        else
+            log("Model not found, this command is only work when you load model first.");
+    }
+
     obj_viewer::obj_viewer(int argc, char** argv)
     {
         view = viewport::GetInstance(this,argc, argv);
