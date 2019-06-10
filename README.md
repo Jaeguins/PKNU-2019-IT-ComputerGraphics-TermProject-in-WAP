@@ -19,10 +19,14 @@
 ## 사용법
 * 마우스 드래그로 회전
 * `+`,`-` 키로 확대/축소
+* `Ctrl`+`C` 종료
 * 명령어
 	* `help` : 명령어 리스트 확인
 	* `obj (파일 경로)` : .obj파일 로드
 	* `identify` : 회전 초기화
+	* `autosize` : 자동확대로 초기화
+	* `tex (파일 경로)` : 텍스쳐 파일 로드
+	
 ## 참고
 
 * [Sean Barrett](https://github.com/nothings)의 [이미지 로딩 라이브러리](https://github.com/nothings/stb/blob/master/stb_image.h)를 사용했습니다.

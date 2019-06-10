@@ -10,7 +10,7 @@ namespace model_viewer
     void obj_viewer::load(string filename)
     {
         clear();
-        read_object = new obj_reader(view,filename.c_str());
+        read_object = new obj_reader(view, filename.c_str());
         view->components.push_back(static_cast<gl_object*>(read_object));
     }
     void obj_viewer::clear() const
@@ -23,9 +23,9 @@ namespace model_viewer
         }
         delete(read_object);
     }
-    void obj_viewer::log(string data,float time)
+    void obj_viewer::log(string data, float time)
     {
-        consoleIO->log(data,time);
+        consoleIO->log(data, time);
     }
 
     void obj_viewer::try_load_tex(string path) {
@@ -35,9 +35,16 @@ namespace model_viewer
             log("Model not found, this command is only work when you load model first.");
     }
 
+    void obj_viewer::try_auto_magnify() {
+        if (read_object != nullptr)
+            read_object->auto_magnify();
+        else
+            log("Model not found, this command is only work when you load model first.");
+    }
+
     obj_viewer::obj_viewer(int argc, char** argv)
     {
-        view = viewport::GetInstance(this,argc, argv);
+        view = viewport::GetInstance(this, argc, argv);
         consoleIO = new console(this);
 
     }

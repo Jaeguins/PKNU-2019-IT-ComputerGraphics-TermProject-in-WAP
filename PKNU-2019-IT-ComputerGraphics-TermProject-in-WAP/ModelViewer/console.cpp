@@ -34,15 +34,14 @@ namespace model_viewer
                 cam->xAngle = 0;
                 cam->yAngle = 0;
                 log("Rotation set to default.");
-            }else if(!args[0].compare("autosize"))
-            {
-                parent->read_object->auto_magnify();
             }
+            else if (!args[0].compare("autosize"))
+                parent->try_auto_magnify();
             else if (!args[0].compare("help")) {
                 float helpShowTime = 10000;
                 log("", helpShowTime);
-                log("Ctrl + C : Exit program.",helpShowTime);
-                log("+ or - : Zoom in/out",helpShowTime);
+                log("Ctrl + C : Exit program.", helpShowTime);
+                log("+ or - : Zoom in/out", helpShowTime);
                 log("tex [file path] : open and apply texture", helpShowTime);
                 log("obj [file path] : Open .obj file", helpShowTime);
                 log("identify : Reset rotation", helpShowTime);
@@ -55,7 +54,8 @@ namespace model_viewer
         case 2:
             if (!args[0].compare("obj")) {
                 parent->load(args[1]);
-            }else if(!args[0].compare("tex")) {
+            }
+            else if (!args[0].compare("tex")) {
                 parent->try_load_tex(args[1]);
             }
             break;
@@ -68,7 +68,7 @@ namespace model_viewer
     void console::render()
     {
         float WinPosX = -parent->view->resolutionX / 160.f;
-        float WinPosY = parent->view->resolutionY / 160.f*.9f, diff = parent->view->resolutionY / 160.f*.05f;
+        float WinPosY = parent->view->resolutionY / 160.f * .9f, diff = parent->view->resolutionY / 160.f * .05f;
         view->drawText(WinPosX, WinPosY, input_buffer->c_str());
         WinPosY -= diff;
         auto strit = output_buffer->rbegin();
