@@ -68,7 +68,6 @@ namespace model_viewer {
 
 
     void viewport::baseKeyFunc(unsigned char key, int x, int y) {
-        printf("%c", key);
         switch (key)
         {
         case '=':
@@ -172,7 +171,7 @@ namespace model_viewer {
 
 
         glEnable(GL_TEXTURE_2D);
-
+        glBindTexture(GL_TEXTURE_2D, 0);
         
         glColor3f(1, 1, 1);
         for (gl_object* t : components)
