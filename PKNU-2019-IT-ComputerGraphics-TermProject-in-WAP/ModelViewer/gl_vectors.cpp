@@ -136,13 +136,6 @@ namespace advanced_gl {
         glEnd();
         glDisable(GL_TEXTURE_2D);
         glDisable(GL_LIGHTING);
-        /*glColor3f(0, 1, 0);
-        glBegin(GL_LINES);
-        for (int i = 0; i < face.amount; i++) {
-            glVertexVector(face.vertices[i]);
-            glVertexVector(face.vertices[i]+face.normals[i]);
-        }
-        glEnd();*/
     }
 
     gl_vec_2f zero2f = gl_vec_2f(0, 0);

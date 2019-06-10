@@ -71,10 +71,10 @@ namespace model_viewer {
         switch (key)
         {
         case '=':
-            camera->magnify += .05f;
+            camera->magnify += .2f;
             break;
         case '-':
-            camera->magnify -= .05f;
+            camera->magnify -= .2f;
             break;
         case '`'://HACK CHEAT MODEL CODE
             parent->consoleIO->input_buffer->append("obj ../M24/M24.obj");
