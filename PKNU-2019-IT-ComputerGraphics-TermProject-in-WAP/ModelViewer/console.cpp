@@ -43,11 +43,11 @@ namespace model_viewer
                 log("", helpShowTime);
                 log("Ctrl + C : Exit program.",helpShowTime);
                 log("+ or - : Zoom in/out",helpShowTime);
-                log("autosize : Reset zoom to auto-generated magnification",helpShowTime);
-                log("identify [] : Reset rotation", helpShowTime);
-                log("obj [file path] : Open .obj file", helpShowTime);
                 log("tex [file path] : open and apply texture", helpShowTime);
-                log("help [] : Show this message", helpShowTime);
+                log("obj [file path] : Open .obj file", helpShowTime);
+                log("identify : Reset rotation", helpShowTime);
+                log("help : Show this message", helpShowTime);
+                log("autosize : Reset zoom to auto-generated magnification", helpShowTime);
                 log("", helpShowTime);
                 log("Commands :", helpShowTime);
             }

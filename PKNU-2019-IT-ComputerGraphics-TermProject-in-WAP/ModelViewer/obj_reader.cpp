@@ -120,7 +120,7 @@ namespace model_viewer
         faces = temp_faces;
         auto_position();
         auto_magnify();
-        parent->log("Load done.");
+        parent->log("Model Successfully load.");
         return true;
     }
     //Texture Generation
@@ -138,11 +138,25 @@ namespace model_viewer
 
 
         data = stbi_load(path.c_str(), &sizeX, &sizeY, &channels, 0);
-
-        if (data)
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, sizeX, sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        else
-            printf("file not found");
+        GLenum format;
+        switch(channels) {
+        case 1:
+            format = GL_RED;
+            break;
+        case 2:
+            format = GL_RGBA;
+            break;
+        case 3:
+            format = GL_RGB;
+            break;
+        default:
+            format = GL_RGBA;
+        }
+        if (data) {
+            glTexImage2D(GL_TEXTURE_2D, 0, format, sizeX, sizeY, 0, format, GL_UNSIGNED_BYTE, data);
+            parent->log("Texture Succesfully load.");
+        }else
+            parent->log("file not found");
 
 
 
