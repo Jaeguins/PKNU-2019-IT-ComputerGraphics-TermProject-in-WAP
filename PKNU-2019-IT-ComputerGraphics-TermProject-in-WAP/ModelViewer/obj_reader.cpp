@@ -42,7 +42,6 @@ namespace model_viewer
         float sizeX = x_max - x_min, sizeY = y_max - y_min, sizeZ = z_max - z_min;
         float max_size = max(max(sizeX, sizeY), sizeZ);
         max_size = floor(1280 / max_size) / 20;
-        printf("%.2f\n", max_size);
         parent->camera->magnify = max_size;
     }
 
@@ -63,7 +62,7 @@ namespace model_viewer
             string line;
             if (!getline(file, line))
                 break;
-            if (line.size() < 1)continue;
+            if (line.empty())continue;
             vector<string>word = split(line, ' ');
             if (word[0] == "v") {
                 gl_vec_3f vertex;

@@ -26,6 +26,7 @@ namespace model_viewer
         void clear() const;
         void log(string data,float time=-1);
         void try_load_tex(string cs);
+        void try_auto_magnify();
         obj_viewer(int,char**);
     };
 }
