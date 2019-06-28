@@ -1,5 +1,5 @@
 
-#include <GL/glut.h>
+#include <gl/glut.h>
 #include "stb_image.hpp"
 #include "gl_object.hpp"
 #include "viewport.hpp"
