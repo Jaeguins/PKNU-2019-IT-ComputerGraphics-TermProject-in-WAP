@@ -1,5 +1,5 @@
 #pragma once
-#include <GL/glut.h>
+#include <gl/glut.h>
 
 namespace advanced_gl
 {
