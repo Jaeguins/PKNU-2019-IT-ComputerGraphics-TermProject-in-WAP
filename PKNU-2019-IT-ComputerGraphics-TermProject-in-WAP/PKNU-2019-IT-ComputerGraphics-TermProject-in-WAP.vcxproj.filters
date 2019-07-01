@@ -80,5 +80,23 @@
     <ClInclude Include="ModelViewer\string_split.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="ModelViewer\GL\freeglut.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelViewer\GL\freeglut_ext.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelViewer\GL\freeglut_std.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelViewer\GL\glut.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ModelViewer\GL\freeglut.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="ModelViewer\GL\freeglut.lib" />
   </ItemGroup>
 </Project>

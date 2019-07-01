@@ -1,8 +1,8 @@
 
-#include <gl/glut.h>
+#include "GL/glut.h"
 #include "stb_image.hpp"
 #include "gl_object.hpp"
-#include "viewport.hpp"
+#include "Viewport.hpp"
 #include <vector>
 #include <functional>
 #include "gl_camera.hpp"

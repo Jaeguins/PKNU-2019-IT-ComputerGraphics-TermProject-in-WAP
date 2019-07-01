@@ -1,4 +1,4 @@
-#include <gl/glut.h>
+#include "gl/glut.h"
 #include "gl_object.hpp"
 namespace advanced_gl {
     void gl_object::render() {

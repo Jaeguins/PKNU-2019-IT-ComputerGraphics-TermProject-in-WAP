@@ -5,7 +5,6 @@
 #include "obj_viewer.hpp"
 #include "string_split.h"
 #include "gl_camera.hpp"
-#include "obj_reader.hpp"
 
 namespace model_viewer
 {

@@ -1,5 +1,4 @@
 #pragma once
-#include<gl/glut.h>
 #include"gl_vectors.hpp"
 
 namespace advanced_gl {

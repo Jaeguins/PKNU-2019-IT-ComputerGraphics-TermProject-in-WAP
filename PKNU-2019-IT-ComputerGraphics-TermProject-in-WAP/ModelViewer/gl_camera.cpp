@@ -1,5 +1,5 @@
 #include "gl_Camera.hpp"
-#include <gl/glut.h>
+#include "gl/glut.h"
 namespace advanced_gl {
     void gl_camera::cameraMove() const
     {

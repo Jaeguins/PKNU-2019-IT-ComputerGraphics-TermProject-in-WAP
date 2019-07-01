@@ -1,6 +1,5 @@
 
-#include<iostream>
-#include<gl/glut.h>
+#include"ModelViewer/GL/glut.h"
 #include "ModelViewer/obj_viewer.hpp"
 
 

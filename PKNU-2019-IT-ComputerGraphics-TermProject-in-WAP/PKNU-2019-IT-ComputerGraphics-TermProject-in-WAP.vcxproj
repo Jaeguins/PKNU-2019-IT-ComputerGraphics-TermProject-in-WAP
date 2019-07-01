@@ -76,11 +76,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../glut/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>../glut/</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glut32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>ModelViewer/GL</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -106,14 +107,14 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
+      <AdditionalDependencies>freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <SubSystem>Console</SubSystem>
     </Link>
@@ -150,6 +151,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModelViewer\console.hpp" />
+    <ClInclude Include="ModelViewer\GL\freeglut.h" />
+    <ClInclude Include="ModelViewer\GL\freeglut_ext.h" />
+    <ClInclude Include="ModelViewer\GL\freeglut_std.h" />
+    <ClInclude Include="ModelViewer\GL\glut.h" />
     <ClInclude Include="ModelViewer\gl_camera.hpp" />
     <ClInclude Include="ModelViewer\gl_object.hpp" />
     <ClInclude Include="ModelViewer\gl_vectors.hpp" />
@@ -157,6 +162,14 @@
     <ClInclude Include="ModelViewer\obj_reader.hpp" />
     <ClInclude Include="ModelViewer\string_split.h" />
     <ClInclude Include="ModelViewer\viewport.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="freeglut.dll">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="ModelViewer\GL\freeglut.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
